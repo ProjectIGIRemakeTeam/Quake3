@@ -1,6 +1,6 @@
 # Quake III Arena
 
-A Quake III Arena port designed for running in vanilla JavaScript pre-ECMAScript 2015 (no WebAssembly). Simply open the link below, click the red icon, and select all the `PK3` files and `q3config.cfg` (optional); all files will be loaded and booted automatically. If you have the commercial version and you want to play it, you need to have the Point Release 1.32 version, this means than you need to have and select at least the following files: `pak0.pk3`,  `pak1.pk3`, `pak2.pk3`, `pak3.pk3` and `pak4.pk3`. The multiplayer mode is not available in this build, for multiplayer check the original project link at the bottom of this document.
+A Quake III Arena port designed for running in vanilla JavaScript pre-ECMAScript 2015 (no WebAssembly). Simply open the link below, click the red icon, and select all the `PK3` files and `q3config.cfg` (optional); all files will be loaded and booted automatically. If you have the commercial version and you want to play it, you need to have the Point Release 1.32 version, this means than you need to have and select at least the following files: `pak0.pk3`,  `pak1.pk3`, `pak2.pk3`, `pak3.pk3` and `pak4.pk3`. The multiplayer mode is not available in this project, for multiplayer check the original project link at the bottom of this document.
 
 ## Links:
 
@@ -43,21 +43,9 @@ embedQuake3({
 
 ## Main differences with the original project:
 
-- Added logic to load states.
-- Added logic to save states.
-- Added logic to toggle sound.
-- Added logic for setting keys for player 1.
-- Added logic for setting keys for player 2.
-- Fixed rendering issues when using tiles.
-- Fixed issue where PAL games were not loaded.
-- Fixed issue where PAL games were playing the sound too fast.
-- Fixed issue where PAL games were not filling the screen width.
-- Fixed issue where the player 2 keys was not yet implemented in wasm.
-- Fixed issue where the sound event was called from the JavaScript side.
-- Pulled the latest changes from the original Genesis Plus GX repository.
-- Implemented a diferrent setting for porting the emulator file to a asm.js file.
-- Implemented logic for pausing the emulator on blur and resuming on focus.
-- Implemented a process that converts the JavaScript build to pre-ECMAScript 2015.
+- Removed CDN dependency.
+- Fixed build so it can handle PK3 files dynamically.
+- Fixed build so it can handle big files (the commercial version).
 
 ## Based on the work of:
 
