@@ -1,6 +1,6 @@
 /**
  * electron_windows.js
- * Windows Porting Tool Window
+ * Windows Forms Porting Tool Window
  * Activated by windowsJS() function
  */
 
@@ -94,7 +94,7 @@ Write-Host "   Ensure you own legal copies of games you port." -ForegroundColor 
 Write-Host ""
 
 Write-Host "🎯 Ready to port Electron games to Windows!" -ForegroundColor Green
-Write-Host "   Run: .\\Electron_to_windows.Electron to start" -ForegroundColor Cyan
+Write-Host "   Run: .\\electron_to_windows.ps1 to start" -ForegroundColor Cyan
 Write-Host ""
 
 # Example usage
@@ -113,9 +113,9 @@ Write-Host "✨ PowerShell script generation complete!" -ForegroundColor Green
 Write-Host "==========================================" -ForegroundColor Gray
 `;
 
-// Main function to show Windows porting tool
+// Main function to show Windows Forms porting tool
 function windowsJS(title, icon_url, splash_url) {
-  console.log("🪟 Windows Porting Tool activated");
+  console.log("🪟 Windows Forms Porting Tool activated");
   const gamesCount = 0;
 
   // Create the overlay if it doesn't exist
@@ -143,357 +143,244 @@ function windowsJS(title, icon_url, splash_url) {
     return; // Already visible
   }
 
-  // Create the window
+  // Create the Windows Forms-style window
   const windowContainer = document.createElement("div");
   windowContainer.style.cssText = `
-    width: 90%;
-    max-width: 1000px;
-    height: 80vh;
-    background: linear-gradient(135deg, #0078d7 0%, #106ebe 100%);
-    border-radius: 8px 8px 0 0;
+    width: 800px;
+    height: 600px;
+    background: #f0f0f0;
+    border: 2px solid #3c8dbc;
+    border-radius: 0;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    border: 1px solid #005a9e;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
   `;
 
-  // Window header with Windows style
-  const windowHeader = document.createElement("div");
-  windowHeader.style.cssText = `
-    background: linear-gradient(to bottom, #0078d7, #005a9e);
-    padding: 8px 15px;
+  // Windows Forms Title Bar
+  const titleBar = document.createElement("div");
+  titleBar.style.cssText = `
+    background: linear-gradient(to bottom, #3c8dbc, #2a6496);
+    padding: 8px 12px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid #004578;
+    border-bottom: 2px solid #1d5c83;
     user-select: none;
-    height: 32px;
+    height: 36px;
   `;
 
-  // Windows window title
-  const windowTitle = document.createElement("div");
-  windowTitle.textContent = "Windows Porting Tool";
-  windowTitle.style.cssText = `
+  // Title with icon
+  const titleText = document.createElement("div");
+  titleText.textContent = title || "Electron to Windows Porting Tool";
+  titleText.style.cssText = `
     color: white;
-    font-weight: 600;
+    font-weight: bold;
     font-size: 14px;
     flex: 1;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
   `;
 
-  // Windows icon
-  const windowsIcon = document.createElement("img");
-  windowsIcon.src = cover_url;
-  windowsIcon.alt = "Windows";
-  windowsIcon.style.cssText = `
-    width: 16px;
-    height: 16px;
+  // Windows Forms-style icon
+  const titleIcon = document.createElement("img");
+  titleIcon.src =
+    icon_url || "https://cdn.sdappnet.cloud/rtx/images/windows-icon.png";
+  titleIcon.alt = "Windows";
+  titleIcon.style.cssText = `
+    width: 20px;
+    height: 20px;
   `;
-  windowTitle.prepend(windowsIcon);
+  titleText.prepend(titleIcon);
 
-  // Windows window controls (Minimize, Maximize, Close)
+  // Windows Forms window controls
   const windowControls = document.createElement("div");
   windowControls.style.cssText = `
     display: flex;
-    gap: 2px;
+    gap: 4px;
   `;
 
   const minimizeBtn = document.createElement("button");
-  minimizeBtn.innerHTML = "&#x2014;";
+  minimizeBtn.innerHTML = "_";
   minimizeBtn.style.cssText = `
-    background: transparent;
+    background: #3c8dbc;
     color: white;
-    border: none;
-    width: 46px;
-    height: 32px;
-    font-size: 20px;
+    border: 1px solid #2a6496;
+    width: 30px;
+    height: 24px;
+    font-size: 14px;
+    font-weight: bold;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.2s;
+    transition: all 0.2s;
   `;
 
   const maximizeBtn = document.createElement("button");
-  maximizeBtn.innerHTML = "&#x25A1;";
+  maximizeBtn.innerHTML = "□";
   maximizeBtn.style.cssText = `
-    background: transparent;
+    background: #3c8dbc;
     color: white;
-    border: none;
-    width: 46px;
-    height: 32px;
-    font-size: 16px;
+    border: 1px solid #2a6496;
+    width: 30px;
+    height: 24px;
+    font-size: 14px;
+    font-weight: bold;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.2s;
+    transition: all 0.2s;
   `;
 
   const closeBtn = document.createElement("button");
-  closeBtn.innerHTML = "&#x2715;";
+  closeBtn.innerHTML = "×";
   closeBtn.style.cssText = `
-    background: transparent;
+    background: #e74c3c;
     color: white;
-    border: none;
-    width: 46px;
-    height: 32px;
-    font-size: 18px;
+    border: 1px solid #c0392b;
+    width: 30px;
+    height: 24px;
+    font-size: 16px;
+    font-weight: bold;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.2s;
+    transition: all 0.2s;
   `;
 
-  // Hover effects for Windows buttons
-  [minimizeBtn, maximizeBtn, closeBtn].forEach((btn) => {
+  // Hover effects
+  [minimizeBtn, maximizeBtn].forEach((btn) => {
     btn.addEventListener("mouseover", () => {
-      if (btn === closeBtn) {
-        btn.style.background = "#e81123";
-      } else {
-        btn.style.background = "rgba(255, 255, 255, 0.2)";
-      }
+      btn.style.background = "#4a9ccc";
+      btn.style.borderColor = "#3c8dbc";
     });
     btn.addEventListener("mouseout", () => {
-      btn.style.background = "transparent";
+      btn.style.background = "#3c8dbc";
+      btn.style.borderColor = "#2a6496";
     });
+  });
+
+  closeBtn.addEventListener("mouseover", () => {
+    closeBtn.style.background = "#ff6b5a";
+    closeBtn.style.borderColor = "#e74c3c";
+  });
+  closeBtn.addEventListener("mouseout", () => {
+    closeBtn.style.background = "#e74c3c";
+    closeBtn.style.borderColor = "#c0392b";
   });
 
   windowControls.appendChild(minimizeBtn);
   windowControls.appendChild(maximizeBtn);
   windowControls.appendChild(closeBtn);
 
-  windowHeader.appendChild(windowTitle);
-  windowHeader.appendChild(windowControls);
+  titleBar.appendChild(titleText);
+  titleBar.appendChild(windowControls);
 
-  // Window content area (Windows blue gradient)
-  const windowContent = document.createElement("div");
-  windowContent.style.cssText = `
+  // Main Content Area
+  const mainContent = document.createElement("div");
+  mainContent.style.cssText = `
     flex: 1;
     display: flex;
+    background: #f0f0f0;
     overflow: hidden;
-    background: linear-gradient(135deg, #f0f0f0 0%, #e6e6e6 100%);
   `;
 
-  // Left panel - Information (Windows style)
+  // Left Panel - Menu/Controls (like Windows Forms Toolbox)
   const leftPanel = document.createElement("div");
   leftPanel.style.cssText = `
-    width: 320px;
-    background: white;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    border-right: 1px solid #d0d0d0;
-    overflow-y: auto;
-  `;
-
-  // Windows logo and title
-  const windowsHeader = document.createElement("div");
-  windowsHeader.style.cssText = `
-    text-align: center;
-    margin-bottom: 25px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #e0e0e0;
-  `;
-
-  const windowsLogo = document.createElement("img");
-  windowsLogo.src = icon_url;
-  windowsLogo.alt = "Windows";
-  windowsLogo.style.cssText = `
-    width: 60px;
-    height: 60px;
-    margin-bottom: 15px;
-  `;
-
-  const toolTitle = document.createElement("h2");
-  toolTitle.textContent = `${title} Electron to Windows`;
-  toolTitle.style.cssText = `
-    color: #0078d7;
-    margin: 0 0 5px 0;
-    font-size: 1.5rem;
-    font-weight: 600;
-  `;
-
-  const toolSubtitle = document.createElement("p");
-  toolSubtitle.textContent = "Game Porting Utility";
-  toolSubtitle.style.cssText = `
-    color: #666;
-    margin: 0;
-    font-size: 0.95rem;
-  `;
-
-  windowsHeader.appendChild(windowsLogo);
-  windowsHeader.appendChild(toolTitle);
-  windowsHeader.appendChild(toolSubtitle);
-  leftPanel.appendChild(windowsHeader);
-
-  // App header with icon
-  const appHeader = document.createElement("div");
-  appHeader.style.cssText = `
-    text-align: center;
-    margin-bottom: 20px;
-  `;
-
-  const appIcon = document.createElement("img");
-  appIcon.src = "https://cdn.sdappnet.cloud/rtx/images/Windows-Logo.png";
-  appIcon.alt = "Windows";
-  appIcon.style.cssText = `
-    width: 80px;
-    height: 80px;
-    border-radius: 16px;
-    margin-bottom: 15px;
-  `;
-
-  leftPanel.appendChild(appIcon);
-
-  // System Info Box (Windows style)
-  const sysInfoBox = document.createElement("div");
-  sysInfoBox.style.cssText = `
-    background: #f8f8f8;
-    border: 1px solid #d0d0d0;
-    border-radius: 4px;
+    width: 220px;
+    background: #e8e8e8;
+    border-right: 2px solid #d0d0d0;
     padding: 15px;
-    margin-bottom: 20px;
-  `;
-
-  const sysInfoTitle = document.createElement("h3");
-  sysInfoTitle.textContent = "System Information";
-  sysInfoTitle.style.cssText = `
-    color: #0078d7;
-    margin: 0 0 12px 0;
-    font-size: 16px;
-    font-weight: 600;
-  `;
-
-  const gamesStat = document.createElement("div");
-  gamesStat.textContent = `📁 Games Available: ${gamesCount}`;
-  gamesStat.style.cssText = `
-    color: #107c10;
-    margin-bottom: 8px;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  `;
-
-  const scriptStat = document.createElement("div");
-  scriptStat.textContent = "📝 PowerShell Script: Ready";
-  scriptStat.style.cssText = `
-    color: #0078d7;
-    margin-bottom: 8px;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  `;
-
-  const statusStat = document.createElement("div");
-  statusStat.textContent = "🟢 Status: Operational";
-  statusStat.style.cssText = `
-    color: #107c10;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  `;
-
-  sysInfoBox.appendChild(sysInfoTitle);
-  sysInfoBox.appendChild(gamesStat);
-  sysInfoBox.appendChild(scriptStat);
-  sysInfoBox.appendChild(statusStat);
-  leftPanel.appendChild(sysInfoBox);
-
-  // Windows-style buttons
-  const actionsContainer = document.createElement("div");
-  actionsContainer.style.cssText = `
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin-top: auto;
+    gap: 10px;
   `;
 
-  // Copy Script Button (Windows style)
-  const copyButton = document.createElement("button");
-  copyButton.textContent = "Copy PowerShell Script";
-  copyButton.style.cssText = `
-    background: linear-gradient(to bottom, #e1e1e1, #d4d4d4);
-    color: #000;
-    border: 1px solid #a6a6a6;
-    border-radius: 4px;
-    padding: 10px 15px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    text-align: left;
-    position: relative;
+  // Group Box 1: Application Info
+  const appInfoGroup = createGroupBox("Application Information");
+  const appIcon = document.createElement("img");
+  appIcon.src =
+    icon_url || "https://cdn.sdappnet.cloud/rtx/images/windows-icon.png";
+  appIcon.alt = "App Icon";
+  appIcon.style.cssText = `
+    width: 64px;
+    height: 64px;
+    margin: 10px auto;
+    display: block;
   `;
-  copyButton.innerHTML =
-    '<i class="far fa-copy" style="font-size: 16px;"></i> Copy PowerShell Script';
-  copyButton.addEventListener("mouseover", () => {
-    copyButton.style.background =
-      "linear-gradient(to bottom, #f0f0f0, #e5e5e5)";
-    copyButton.style.borderColor = "#0078d7";
-  });
-  copyButton.addEventListener("mouseout", () => {
-    copyButton.style.background =
-      "linear-gradient(to bottom, #e1e1e1, #d4d4d4)";
-    copyButton.style.borderColor = "#a6a6a6";
-  });
+
+  const appNameLabel = createLabel("Application Name:");
+  appNameLabel.style.fontWeight = "bold";
+  const appNameValue = createLabel(title || "Electron Porting Tool");
+
+  const versionLabel = createLabel("Version:");
+  versionLabel.style.fontWeight = "bold";
+  const versionValue = createLabel("1.0.0");
+
+  const statusLabel = createLabel("Status:");
+  statusLabel.style.fontWeight = "bold";
+  const statusValue = createLabel("🟢 Ready");
+  statusValue.style.color = "#27ae60";
+
+  appInfoGroup.appendChild(appIcon);
+  appInfoGroup.appendChild(appNameLabel);
+  appInfoGroup.appendChild(appNameValue);
+  appInfoGroup.appendChild(versionLabel);
+  appInfoGroup.appendChild(versionValue);
+  appInfoGroup.appendChild(statusLabel);
+  appInfoGroup.appendChild(statusValue);
+
+  // Group Box 2: Statistics
+  const statsGroup = createGroupBox("Statistics");
+  const gamesLabel = createLabel("Games Available:");
+  gamesLabel.style.fontWeight = "bold";
+  const gamesValue = createLabel(`${gamesCount} games`);
+
+  const scriptLabel = createLabel("Script Lines:");
+  scriptLabel.style.fontWeight = "bold";
+  const scriptValue = createLabel(
+    `${WINDOWS_POWERSHELL_SCRIPT.split("\n").length} lines`
+  );
+
+  const generatedLabel = createLabel("Generated:");
+  generatedLabel.style.fontWeight = "bold";
+  const generatedValue = createLabel(new Date().toLocaleDateString());
+
+  statsGroup.appendChild(gamesLabel);
+  statsGroup.appendChild(gamesValue);
+  statsGroup.appendChild(scriptLabel);
+  statsGroup.appendChild(scriptValue);
+  statsGroup.appendChild(generatedLabel);
+  statsGroup.appendChild(generatedValue);
+
+  // Group Box 3: Actions
+  const actionsGroup = createGroupBox("Actions");
+
+  // Copy Button (Windows Forms style)
+  const copyButton = createButton("📋 Copy Script", "#3498db", "#2980b9");
   copyButton.addEventListener("click", () => {
     const script = WINDOWS_POWERSHELL_SCRIPT.replace(
       "[GAME_COUNT_PLACEHOLDER]",
       gamesCount
     );
     navigator.clipboard.writeText(script).then(() => {
-      const originalHTML = copyButton.innerHTML;
-      copyButton.innerHTML =
-        '<i class="fas fa-check" style="font-size: 16px; color: #107c10;"></i> Copied!';
+      const originalText = copyButton.textContent;
+      copyButton.textContent = "✅ Copied!";
+      copyButton.style.background = "#27ae60";
       setTimeout(() => {
-        copyButton.innerHTML = originalHTML;
+        copyButton.textContent = originalText;
+        copyButton.style.background = "#3498db";
       }, 2000);
     });
   });
 
-  // Download Script Button (Windows style)
-  const downloadButton = document.createElement("button");
-  downloadButton.textContent = "Download .Electron File";
-  downloadButton.style.cssText = `
-    background: linear-gradient(to bottom, #e1e1e1, #d4d4d4);
-    color: #000;
-    border: 1px solid #a6a6a6;
-    border-radius: 4px;
-    padding: 10px 15px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    text-align: left;
-  `;
-  downloadButton.innerHTML =
-    '<i class="fas fa-download" style="font-size: 16px;"></i> Download .Electron File';
-  downloadButton.addEventListener("mouseover", () => {
-    downloadButton.style.background =
-      "linear-gradient(to bottom, #f0f0f0, #e5e5e5)";
-    downloadButton.style.borderColor = "#0078d7";
-  });
-  downloadButton.addEventListener("mouseout", () => {
-    downloadButton.style.background =
-      "linear-gradient(to bottom, #e1e1e1, #d4d4d4)";
-    downloadButton.style.borderColor = "#a6a6a6";
-  });
+  // Download Button (Windows Forms style)
+  const downloadButton = createButton("💾 Download .ps1", "#2ecc71", "#27ae60");
   downloadButton.addEventListener("click", () => {
     const script = WINDOWS_POWERSHELL_SCRIPT.replace(
       "[GAME_COUNT_PLACEHOLDER]",
@@ -503,125 +390,81 @@ function windowsJS(title, icon_url, splash_url) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "Electron_to_windows.Electron";
+    a.download = "electron_to_windows.ps1";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 
-    const originalHTML = downloadButton.innerHTML;
-    downloadButton.innerHTML =
-      '<i class="fas fa-check" style="font-size: 16px; color: #107c10;"></i> Downloaded!';
+    const originalText = downloadButton.textContent;
+    downloadButton.textContent = "✅ Downloaded!";
+    downloadButton.style.background = "#27ae60";
     setTimeout(() => {
-      downloadButton.innerHTML = originalHTML;
+      downloadButton.textContent = originalText;
+      downloadButton.style.background = "#2ecc71";
     }, 2000);
   });
 
-  // Close Button (Windows style)
-  const closeWindowBtn = document.createElement("button");
-  closeWindowBtn.textContent = "Close Window";
-  closeWindowBtn.style.cssText = `
-    background: linear-gradient(to bottom, #e1e1e1, #d4d4d4);
-    color: #000;
-    border: 1px solid #a6a6a6;
-    border-radius: 4px;
-    padding: 10px 15px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    text-align: left;
-  `;
-  closeWindowBtn.innerHTML =
-    '<i class="fas fa-times" style="font-size: 16px;"></i> Close Window';
-  closeWindowBtn.addEventListener("mouseover", () => {
-    closeWindowBtn.style.background =
-      "linear-gradient(to bottom, #ffe6e6, #ffd4d4)";
-    closeWindowBtn.style.borderColor = "#e81123";
-  });
-  closeWindowBtn.addEventListener("mouseout", () => {
-    closeWindowBtn.style.background =
-      "linear-gradient(to bottom, #e1e1e1, #d4d4d4)";
-    closeWindowBtn.style.borderColor = "#a6a6a6";
-  });
-  closeWindowBtn.addEventListener("click", () => {
+  // Close Button (Windows Forms style)
+  const closeButton = createButton("✕ Close", "#e74c3c", "#c0392b");
+  closeButton.addEventListener("click", () => {
     overlay.style.display = "none";
   });
 
-  actionsContainer.appendChild(copyButton);
-  actionsContainer.appendChild(downloadButton);
-  actionsContainer.appendChild(closeWindowBtn);
-  leftPanel.appendChild(actionsContainer);
+  actionsGroup.appendChild(copyButton);
+  actionsGroup.appendChild(downloadButton);
+  actionsGroup.appendChild(closeButton);
 
-  // Right panel - Script viewer (Windows Explorer style)
+  leftPanel.appendChild(appInfoGroup);
+  leftPanel.appendChild(statsGroup);
+  leftPanel.appendChild(actionsGroup);
+
+  // Right Panel - Main Content (like Windows Forms Designer)
   const rightPanel = document.createElement("div");
   rightPanel.style.cssText = `
     flex: 1;
     display: flex;
     flex-direction: column;
     background: white;
-    overflow: hidden;
-    border-left: 1px solid #d0d0d0;
   `;
 
-  // Script header (Windows Explorer style)
-  const scriptHeader = document.createElement("div");
-  scriptHeader.style.cssText = `
-    background: linear-gradient(to bottom, #f8f8f8, #f0f0f0);
-    padding: 10px 15px;
-    border-bottom: 1px solid #d0d0d0;
+  // Tab Control (Windows Forms style)
+  const tabControl = document.createElement("div");
+  tabControl.style.cssText = `
+    background: #f8f8f8;
+    border-bottom: 2px solid #d0d0d0;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 40px;
   `;
 
-  const scriptTitle = document.createElement("div");
-  scriptTitle.textContent = "Electron_to_windows.Electron";
-  scriptTitle.style.cssText = `
-    color: #333;
-    font-family: 'Consolas', 'Courier New', monospace;
-    font-size: 14px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  `;
+  const scriptTab = createTab("PowerShell Script", true);
+  const settingsTab = createTab("Settings", false);
+  const helpTab = createTab("Help", false);
 
-  // PowerShell icon
-  const psIcon = document.createElement("span");
-  psIcon.innerHTML = "💻";
-  psIcon.style.fontSize = "16px";
-  scriptTitle.prepend(psIcon);
+  tabControl.appendChild(scriptTab);
+  tabControl.appendChild(settingsTab);
+  tabControl.appendChild(helpTab);
 
-  const scriptMeta = document.createElement("div");
-  scriptMeta.textContent = `${
-    WINDOWS_POWERSHELL_SCRIPT.split("\n").length
-  } lines`;
-  scriptMeta.style.cssText = `
-    color: #666;
-    font-size: 12px;
-    font-family: 'Segoe UI', sans-serif;
-  `;
-
-  scriptHeader.appendChild(scriptTitle);
-  scriptHeader.appendChild(scriptMeta);
-
-  // Script content area
-  const scriptContent = document.createElement("div");
-  scriptContent.style.cssText = `
+  // Tab Content Area
+  const tabContent = document.createElement("div");
+  tabContent.style.cssText = `
     flex: 1;
-    overflow: auto;
-    padding: 20px;
+    background: white;
+    overflow: hidden;
+  `;
+
+  // Script Viewer (RichTextBox style)
+  const scriptViewer = document.createElement("div");
+  scriptViewer.style.cssText = `
+    width: 100%;
+    height: 100%;
+    padding: 15px;
     font-family: 'Consolas', 'Courier New', monospace;
-    font-size: 13px;
-    line-height: 1.5;
+    font-size: 12px;
+    line-height: 1.4;
     color: #333;
     background: #1e1e1e;
+    overflow: auto;
+    border: none;
   `;
 
   // PowerShell syntax highlighting
@@ -629,47 +472,61 @@ function windowsJS(title, icon_url, splash_url) {
     "[GAME_COUNT_PLACEHOLDER]",
     gamesCount
   );
-  scriptContent.innerHTML = formattedScript
-    .replace(/^#.*$/gm, '<span style="color: #57a64a">$&</span>') // Green comments
-    .replace(/Write-Host.*$/gm, '<span style="color: #569cd6">$&</span>') // Blue Write-Host
-    .replace(/\".*?\"/gm, '<span style="color: #d69d85">$&</span>') // Orange strings
+  scriptViewer.innerHTML = formattedScript
+    .replace(/^#.*$/gm, '<span style="color: #57a64a">$&</span>')
+    .replace(/Write-Host.*$/gm, '<span style="color: #569cd6">$&</span>')
+    .replace(/\".*?\"/gm, '<span style="color: #d69d85">$&</span>')
     .replace(
       /\$[a-zA-Z_][a-zA-Z0-9_]*/gm,
       '<span style="color: #9cdcfe">$&</span>'
-    ) // Light blue variables
+    )
     .replace(
       /\b(function|param|if|else|foreach|return)\b/gm,
       '<span style="color: #c586c0">$1</span>'
-    ) // Purple keywords
+    )
     .replace(
       /\b(New-Item|Get-Date|Out-File)\b/gm,
       '<span style="color: #dcdcaa">$1</span>'
-    ) // Yellow cmdlets
+    )
     .replace(/\n/g, "<br>")
     .replace(/ /g, "&nbsp;");
 
-  rightPanel.appendChild(scriptHeader);
-  rightPanel.appendChild(scriptContent);
+  tabContent.appendChild(scriptViewer);
+  rightPanel.appendChild(tabControl);
+  rightPanel.appendChild(tabContent);
+
+  // Status Bar (Windows Forms style)
+  const statusBar = document.createElement("div");
+  statusBar.style.cssText = `
+    background: #3c8dbc;
+    color: white;
+    padding: 4px 12px;
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid #2a6496;
+    height: 24px;
+  `;
+
+  const statusLeft = document.createElement("div");
+  statusLeft.textContent = "Ready";
+  statusLeft.style.cssText = `color: white;`;
+
+  const statusRight = document.createElement("div");
+  statusRight.textContent = `Games: ${gamesCount} | PowerShell v5.1+`;
+  statusRight.style.cssText = `color: #d6eaf8;`;
+
+  statusBar.appendChild(statusLeft);
+  statusBar.appendChild(statusRight);
 
   // Assemble window
-  windowContent.appendChild(leftPanel);
-  windowContent.appendChild(rightPanel);
+  mainContent.appendChild(leftPanel);
+  mainContent.appendChild(rightPanel);
 
-  windowContainer.appendChild(windowHeader);
-  windowContainer.appendChild(windowContent);
+  windowContainer.appendChild(titleBar);
+  windowContainer.appendChild(mainContent);
+  windowContainer.appendChild(statusBar);
   overlay.appendChild(windowContainer);
-
-  // Add Windows-style taskbar effect
-  const taskbarEffect = document.createElement("div");
-  taskbarEffect.style.cssText = `
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(to right, #0078d7, #50e6ff, #0078d7);
-  `;
-  windowContainer.appendChild(taskbarEffect);
 
   // Window control interactions
   closeBtn.addEventListener("click", () => {
@@ -677,21 +534,127 @@ function windowsJS(title, icon_url, splash_url) {
   });
 
   minimizeBtn.addEventListener("click", () => {
-    windowContent.style.display =
-      windowContent.style.display === "none" ? "flex" : "none";
+    mainContent.style.display =
+      mainContent.style.display === "none" ? "flex" : "none";
+    statusBar.style.display =
+      statusBar.style.display === "none" ? "flex" : "none";
   });
 
   maximizeBtn.addEventListener("click", () => {
     if (windowContainer.style.width === "100%") {
-      windowContainer.style.width = "90%";
-      windowContainer.style.maxWidth = "1000px";
-      windowContainer.style.height = "80vh";
+      windowContainer.style.width = "800px";
+      windowContainer.style.height = "600px";
     } else {
       windowContainer.style.width = "100%";
-      windowContainer.style.maxWidth = "100%";
       windowContainer.style.height = "100%";
     }
   });
+
+  // Tab switching
+  [scriptTab, settingsTab, helpTab].forEach((tab) => {
+    tab.addEventListener("click", () => {
+      [scriptTab, settingsTab, helpTab].forEach((t) => {
+        t.style.background = "#f0f0f0";
+        t.style.borderBottom = "2px solid #f0f0f0";
+        t.style.color = "#666";
+      });
+      tab.style.background = "white";
+      tab.style.borderBottom = "2px solid #3c8dbc";
+      tab.style.color = "#333";
+
+      // Update tab content based on selected tab
+      if (tab === scriptTab) {
+        tabContent.innerHTML = "";
+        tabContent.appendChild(scriptViewer);
+      } else if (tab === settingsTab) {
+        tabContent.innerHTML =
+          "<div style='padding: 20px;'>Settings content would go here...</div>";
+      } else if (tab === helpTab) {
+        tabContent.innerHTML =
+          "<div style='padding: 20px;'>Help content would go here...</div>";
+      }
+    });
+  });
+
+  // Helper functions
+  function createGroupBox(title) {
+    const group = document.createElement("div");
+    group.style.cssText = `
+      background: white;
+      border: 2px solid #d0d0d0;
+      border-radius: 4px;
+      padding: 12px;
+      margin-bottom: 15px;
+    `;
+
+    const groupTitle = document.createElement("div");
+    groupTitle.textContent = title;
+    groupTitle.style.cssText = `
+      background: #3c8dbc;
+      color: white;
+      font-weight: bold;
+      padding: 4px 8px;
+      margin: -12px -12px 12px -12px;
+      border-bottom: 2px solid #2a6496;
+    `;
+
+    group.appendChild(groupTitle);
+    return group;
+  }
+
+  function createLabel(text) {
+    const label = document.createElement("div");
+    label.textContent = text;
+    label.style.cssText = `
+      color: #333;
+      font-size: 13px;
+      margin-bottom: 4px;
+      padding: 2px 0;
+    `;
+    return label;
+  }
+
+  function createButton(text, color, hoverColor) {
+    const button = document.createElement("button");
+    button.textContent = text;
+    button.style.cssText = `
+      background: ${color};
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 4px 0;
+      border-radius: 3px;
+      transition: background 0.2s;
+      text-align: left;
+    `;
+    button.addEventListener("mouseover", () => {
+      button.style.background = hoverColor;
+    });
+    button.addEventListener("mouseout", () => {
+      button.style.background = color;
+    });
+    return button;
+  }
+
+  function createTab(text, active) {
+    const tab = document.createElement("div");
+    tab.textContent = text;
+    tab.style.cssText = `
+      padding: 8px 16px;
+      background: ${active ? "white" : "#f0f0f0"};
+      border-bottom: 2px solid ${active ? "#3c8dbc" : "#f0f0f0"};
+      color: ${active ? "#333" : "#666"};
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: ${active ? "bold" : "normal"};
+      border-right: 1px solid #d0d0d0;
+      user-select: none;
+    `;
+    return tab;
+  }
 
   // Escape key to close
   const escapeHandler = (e) => {
@@ -709,11 +672,15 @@ function windowsJS(title, icon_url, splash_url) {
     }
   });
 
-  console.log(`🪟 Windows Porting Tool displayed with ${gamesCount} games`);
+  console.log(
+    `🪟 Windows Forms Porting Tool displayed with ${gamesCount} games`
+  );
 }
 
 // Export the function to global scope
 window.windowsJS = windowsJS;
 
 console.log("✅ electron_windows.js loaded");
-console.log("🪟 Call windowsJS() to show the Windows porting tool");
+console.log(
+  "🪟 Call windowsJS('Title', 'icon_url') to show the Windows Forms porting tool"
+);
