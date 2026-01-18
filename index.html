@@ -566,21 +566,21 @@
   <script>
     function injectJoystickController() {
       // Check if controller already exists
-      if (!window.controller) {
-        // Create script element
-        const script = document.createElement('script');
-        script.src = 'electron_touchcontrols.js';
-        script.onload = function () {
-          console.log('🎮 Joystick controller injected after game start');
-          // You can customize controller options for Quake 3
-          if (window.controller) {
-            // Adjust for FPS game
-            window.controller.options.position = 'bottom';
-            window.controller.options.opacity = 0.6;
-          }
-        };
-        document.head.appendChild(script);
-      }
+      // if (!window.controller) {
+      //   // Create script element
+      //   const script = document.createElement('script');
+      //   script.src = 'electron_touchcontrols.js';
+      //   script.onload = function () {
+      //     console.log('🎮 Joystick controller injected after game start');
+      //     // You can customize controller options for Quake 3
+      //     if (window.controller) {
+      //       // Adjust for FPS game
+      //       window.controller.options.position = 'bottom';
+      //       window.controller.options.opacity = 0.6;
+      //     }
+      //   };
+      //   document.head.appendChild(script);
+      // }
     }
   </script>
 </body>
