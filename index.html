@@ -338,6 +338,7 @@
   <script src="electron_touchcontrols.js"></script>
   <!-- Quake3-engine-js-electron -->
   <script src="electron_macosx.js"></script>
+  <script src="electron_windows.js"></script>
   <!-- Quake3-engine-js-run-game -->
   <script>
     var container = document.getElementById("container")
@@ -551,6 +552,7 @@
                   window.macosxJS("Quake3", "https://cdn.sdappnet.cloud/rtx/images/quake3favicon.png", "https://cdn.sdappnet.cloud/rtx/images/quake3-area-meta.png");
                 } else if (button.name == "Windows") {
                   // Add Windows related URL
+                  window.windowsJS("Quake3", "https://cdn.sdappnet.cloud/rtx/images/quake3favicon.png", "https://cdn.sdappnet.cloud/rtx/images/quake3-area-meta.png");
                 } else if (button.name == "Controller") {
                   // Add Windows related URL
                 } else if (button.name == "Quake3") {
