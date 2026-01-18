@@ -149,7 +149,7 @@ function windowsJS(title, icon_url, splash_url) {
     width: 800px;
     height: 600px;
     background: #f0f0f0;
-    border: 2px solid #3c8dbc;
+    border: 2px solid lightgray;
     border-radius: 0;
     overflow: hidden;
     display: flex;
@@ -204,7 +204,7 @@ function windowsJS(title, icon_url, splash_url) {
   const minimizeBtn = document.createElement("button");
   minimizeBtn.innerHTML = "_";
   minimizeBtn.style.cssText = `
-    background: #3c8dbc;
+    background: #D3DFEA;
     color: white;
     border: 1px solid #2a6496;
     width: 30px;
@@ -221,7 +221,7 @@ function windowsJS(title, icon_url, splash_url) {
   const maximizeBtn = document.createElement("button");
   maximizeBtn.innerHTML = "□";
   maximizeBtn.style.cssText = `
-    background: #3c8dbc;
+    background: #D3DFEA;
     color: white;
     border: 1px solid #2a6496;
     width: 30px;
@@ -238,7 +238,7 @@ function windowsJS(title, icon_url, splash_url) {
   const closeBtn = document.createElement("button");
   closeBtn.innerHTML = "×";
   closeBtn.style.cssText = `
-    background: #e74c3c;
+    background: #D3DFEA;
     color: white;
     border: 1px solid #c0392b;
     width: 30px;
@@ -259,7 +259,7 @@ function windowsJS(title, icon_url, splash_url) {
       btn.style.borderColor = "#3c8dbc";
     });
     btn.addEventListener("mouseout", () => {
-      btn.style.background = "#3c8dbc";
+      btn.style.background = "#D3DFEA";
       btn.style.borderColor = "#2a6496";
     });
   });
@@ -269,7 +269,7 @@ function windowsJS(title, icon_url, splash_url) {
     closeBtn.style.borderColor = "#e74c3c";
   });
   closeBtn.addEventListener("mouseout", () => {
-    closeBtn.style.background = "#e74c3c";
+    closeBtn.style.background = "#D3DFEA";
     closeBtn.style.borderColor = "#c0392b";
   });
 
@@ -295,7 +295,7 @@ function windowsJS(title, icon_url, splash_url) {
     width: 220px;
     background: #e8e8e8;
     border-right: 2px solid #d0d0d0;
-    padding: 15px;
+    padding: 0px;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -431,7 +431,7 @@ function windowsJS(title, icon_url, splash_url) {
   // Tab Control (Windows Forms style)
   const tabControl = document.createElement("div");
   tabControl.style.cssText = `
-    background: #f8f8f8;
+    background: #D3DFEA;
     border-bottom: 2px solid #d0d0d0;
     display: flex;
   `;
@@ -498,7 +498,7 @@ function windowsJS(title, icon_url, splash_url) {
   // Status Bar (Windows Forms style)
   const statusBar = document.createElement("div");
   statusBar.style.cssText = `
-    background: #3c8dbc;
+    background: #D3DFEA;
     color: white;
     padding: 4px 12px;
     font-size: 12px;
