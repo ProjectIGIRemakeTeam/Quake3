@@ -531,7 +531,7 @@
           const buttons = [
             { id: 'macos-btn', name: 'macOS' },
             { id: 'windows-btn', name: 'Windows' },
-            { id: 'q3-btn', name: 'Quake 3' },
+            { id: 'q3-btn', name: 'Quake3' },
             { id: 'js-btn', name: 'JavaScript' }
           ];
 
@@ -541,6 +541,21 @@
               btnElement.addEventListener('click', function (e) {
                 e.preventDefault();
                 console.log(`${button.name} button clicked`);
+                let url = '';
+
+                if (button.name == "macOS") {
+                  // Add macOS related URL
+                } else if (button.name == "Windows") {
+                  // Add Windows related URL
+                } else if (button.name == "Quake3") {
+                  url = 'https://github.com/inolen/quakejs';
+                } else if (button.name == "JavaScript") {
+                  url = 'https://en.wikipedia.org/wiki/ECMAScript';
+                }
+                // If a URL is defined, open it in a new tab
+                if (url) {
+                  window.open(url, '_blank');
+                }
                 // Empty click handler for now
               });
             }
