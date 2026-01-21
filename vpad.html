@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>D-Pad</title>
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            background: #1a1a1a;
+            height: 100%;
+            display: grid;
+            place-items: center;
+            user-select: none;
+            touch-action: none;
+        }
+
+        #wrapper {
+            position: relative;
+            width: 220px;
+            height: 220px;
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        svg {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .arrow {
+            fill: #2e2e2e;
+            stroke: #121212;
+            stroke-width: 2;
+        }
+
+        .active {
+            fill: #111;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="wrapper">
+        <canvas id="dpad"></canvas>
+
+        <!-- Embossed SVG arrows -->
+        <!-- <svg viewBox="0 0 220 220">
+            <polygon id="up" class="arrow" points="110,32 94,60 126,60" />
+            <polygon id="down" class="arrow" points="110,188 94,160 126,160" />
+            <polygon id="left" class="arrow" points="32,110 60,94 60,126" />
+            <polygon id="right" class="arrow" points="188,110 160,94 160,126" />
+        </svg> -->
+        <!-- Beefier molded-style arrows -->
+        <!-- Compact, chunky molded arrows -->
+        <svg viewBox="0 0 220 220">
+            <g fill="none" stroke="#1b1b1b" stroke-width="7.5" stroke-linejoin="round" stroke-linecap="round">
+
+                <!-- UP -->
+                <path id="up" class="arrow" d="M110 42
+         L92 60
+         H96
+         V70
+         H124
+         V60
+         H128
+         Z" />
+
+                <!-- DOWN -->
+                <path id="down" class="arrow" d="M110 178
+         L92 160
+         H96
+         V150
+         H124
+         V160
+         H128
+         Z" />
+
+                <!-- LEFT -->
+                <path id="left" class="arrow" d="M42 110
+         L60 92
+         V96
+         H70
+         V124
+         H60
+         V128
+         Z" />
+
+                <!-- RIGHT -->
+                <path id="right" class="arrow" d="M178 110
+         L160 92
+         V96
+         H150
+         V124
+         H160
+         V128
+         Z" />
+                `
+
+
+
+
+    </div>
+
+    <script>
+        const canvas = document.getElementById("dpad");
+        const ctx = canvas.getContext("2d");
+        const dpr = window.devicePixelRatio || 1;
+
+        canvas.width = 220 * dpr;
+        canvas.height = 220 * dpr;
+        ctx.scale(dpr, dpr);
+
+        const arrows = {
+            up: document.getElementById("up"),
+            down: document.getElementById("down"),
+            left: document.getElementById("left"),
+            right: document.getElementById("right")
+        };
+
+        function drawDPad() {
+            ctx.clearRect(0, 0, 220, 220);
+
+            // OUTER LIGHT RIM (shorter arms)
+            ctx.fillStyle = "#cfcfcf";
+            ctx.beginPath();
+            ctx.rect(72, 24, 76, 172); // vertical
+            ctx.rect(24, 72, 172, 76); // horizontal
+            ctx.fill();
+
+            // MAIN BODY
+            ctx.fillStyle = "#2b2b2b";
+            ctx.beginPath();
+            ctx.rect(78, 30, 64, 160);
+            ctx.rect(30, 78, 160, 64);
+            ctx.fill();
+
+            // INNER DEPTH
+            const grad = ctx.createLinearGradient(0, 30, 0, 190);
+            grad.addColorStop(0, "#242424");
+            grad.addColorStop(1, "#181818");
+
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.rect(88, 40, 44, 140);
+            ctx.rect(40, 88, 140, 44);
+            ctx.fill();
+
+            // CENTER DOME
+            const dome = ctx.createRadialGradient(104, 104, 4, 110, 110, 18);
+            dome.addColorStop(0, "#3a3a3a");
+            dome.addColorStop(1, "#0f0f0f");
+
+            ctx.beginPath();
+            ctx.arc(110, 110, 14, 0, Math.PI * 2);
+            ctx.fillStyle = dome;
+            ctx.fill();
+        }
+
+
+        drawDPad();
+
+        function getDirection(x, y) {
+            if (x > 80 && x < 140 && y < 80) return "up";
+            if (x > 80 && x < 140 && y > 140) return "down";
+            if (y > 80 && y < 140 && x < 80) return "left";
+            if (y > 80 && y < 140 && x > 140) return "right";
+            return null;
+        }
+
+        function clearActive() {
+            Object.values(arrows).forEach(a => a.classList.remove("active"));
+        }
+
+        canvas.addEventListener("pointerdown", e => {
+            const r = canvas.getBoundingClientRect();
+            const x = e.clientX - r.left;
+            const y = e.clientY - r.top;
+
+            clearActive();
+            const dir = getDirection(x, y);
+            if (dir) {
+                arrows[dir].classList.add("active");
+                console.log("PRESS:", dir);
+            }
+        });
+
+        canvas.addEventListener("pointerup", clearActive);
+        canvas.addEventListener("pointerleave", clearActive);
+    </script>
+
+</body>
+
+</html>
