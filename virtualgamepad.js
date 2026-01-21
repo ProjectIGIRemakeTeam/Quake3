@@ -154,13 +154,13 @@
             padding: 8px 0;
             border-radius: 5px;
             font-family: 'Courier New', monospace;
-            font-size: 12px;
+            font-size: 8px;
             z-index: 99999999;
             pointer-events: none;
             white-space: nowrap;
             border: 1px solid #00aa00;
             box-shadow: 0 2px 10px rgba(0,0,0,0.5);
-            max-width: 90%;
+            max-width: 150px;
             max-height: 200px;
             overflow-y: auto;
             display: flex;
@@ -1135,7 +1135,7 @@
     const systemButtons = createSystemButtons();
     systemButtons.style.cssText = `
             position: absolute;
-            bottom: 20px;
+            bottom: 80px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
@@ -1145,7 +1145,7 @@
 
     // In createTouchControls function, after creating leftJoystick:
     const dpad = createDpadTouch();
-
+    //
     // append on screen buttons
     overlay.appendChild(leftJoystick);
     overlay.appendChild(rightJoystick);
@@ -2365,7 +2365,7 @@
     container.style.cssText = `
         position: absolute;
         left: 30px;
-        top: 30px;
+        top: 130px;
         width: ${config.dpadSize || "120px"};
         height: ${config.dpadSize || "120px"};
         pointer-events: auto;
@@ -2460,8 +2460,8 @@
             transform-origin: 5px 5px;
             transform-box: fill-box;
         }
-        #dpad-buttons > :nth-child(1) { transform: rotate(90deg) translate(2.7px) rotate(-90deg) scale(0.33); } /* UP */
-        #dpad-buttons > :nth-child(2) { transform: rotate(270deg) translate(2.7px) rotate(-270deg) scale(0.33); } /* DOWN */
+        #dpad-buttons > :nth-child(1) { transform: rotate(270deg) translate(2.7px) rotate(-270deg) scale(0.33); } /* DOWN */
+        #dpad-buttons > :nth-child(2) { transform: rotate(90deg) translate(2.7px) rotate(-90deg) scale(0.33); } /* UP */
         #dpad-buttons > :nth-child(3) { transform: rotate(180deg) translate(2.7px) rotate(-180deg) scale(0.33); } /* LEFT */
         #dpad-buttons > :nth-child(4) { transform: rotate(0deg) translate(2.7px) rotate(0deg) scale(0.33); } /* RIGHT */
         .dpad-pressed { 
