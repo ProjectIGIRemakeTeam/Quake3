@@ -3472,10 +3472,30 @@
     return container;
   }
 
+  function enableTouchTrackpad() {
+    if (window.touchTrackpad) {
+      window.touchTrackpad.enable();
+      logDebug("Touch trackpad enabled from toggle");
+      return true;
+    }
+    logDebug("Touch trackpad not available");
+    return false;
+  }
+
+  function disableTouchTrackpad() {
+    if (window.touchTrackpad) {
+      window.touchTrackpad.disable();
+      logDebug("Touch trackpad disabled");
+      return true;
+    }
+    return false;
+  }
+
   function toggleVirtualGamepad() {
     isEnabled = !isEnabled;
 
     if (isEnabled) {
+      enableTouchTrackpad();
       createTouchControls();
       enableButton.innerHTML = "🎮";
       enableButton.title = "Disable Virtual Gamepad";
@@ -3551,6 +3571,592 @@
     logDebug("Quick help displayed");
   }
 
+  // ================ TOUCH-TO-MOUSE TRACKPAD IMPLEMENTATION ================
+
+  function createTouchToMouseTrackpad() {
+    const trackpad = document.createElement("div");
+    trackpad.id = "touch-to-mouse-trackpad";
+
+    trackpad.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        pointer-events: auto;
+        touch-action: none;
+        z-index: ${config.zIndex - 2};
+        display: none;
+        opacity: 1;
+    `;
+
+    document.body.appendChild(trackpad);
+
+    // Configuration for touch-to-mouse behavior
+    const trackpadConfig = {
+      longPressDelay: 650, // ms - time for right-click activation
+      longPressMoveThreshold: 0.01, // % of screen - max movement for right-click
+      doubleTapDeadZoneTime: 250, // ms - time between taps for double-tap
+      doubleTapMoveThreshold: 0.025, // % of screen - max movement for double-tap
+      moveConfirmationThreshold: 5, // pixels - movement needed to confirm drag
+      scrollSensitivity: 10,
+      referenceWidth: 1280,
+      referenceHeight: 720,
+      enableTwoFingerScroll: true,
+      showTouchFeedback: true,
+    };
+
+    // State tracking
+    let activeTouches = new Map();
+    let lastTouchDown = { timestamp: 0, x: 0, y: 0 };
+    let lastTouchUp = { timestamp: 0, x: 0, y: 0 };
+    let touchMoved = false;
+    let isDragging = false;
+    let longPressTimer = null;
+    let dragStartTimer = null;
+    let peakTouchCount = 0;
+    let originalTouchLocation = { x: 0, y: 0 };
+    let lastAveragePosition = { x: 0, y: 0 };
+
+    // Create touch feedback element (visual indicator of touch position)
+    let touchFeedback = null;
+    if (trackpadConfig.showTouchFeedback) {
+      touchFeedback = document.createElement("div");
+      touchFeedback.id = "touch-feedback";
+      touchFeedback.style.cssText = `
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            pointer-events: none;
+            z-index: ${config.zIndex - 1};
+            display: none;
+            transform: translate(-50%, -50%);
+            transition: width 0.1s, height 0.1s, opacity 0.2s;
+            box-shadow: 0 0 15px rgba(0, 150, 255, 0.5);
+        `;
+      document.body.appendChild(touchFeedback);
+    }
+
+    // Calculate relative position (0-1)
+    function getRelativePosition(screenX, screenY) {
+      const rect = trackpad.getBoundingClientRect();
+      return {
+        x: (screenX - rect.left) / rect.width,
+        y: (screenY - rect.top) / rect.height,
+      };
+    }
+
+    // Calculate distance between two relative positions
+    function getRelativeDistance(pos1, pos2) {
+      return Math.sqrt(
+        Math.pow(pos1.x - pos2.x, 2) + Math.pow(pos1.y - pos2.y, 2)
+      );
+    }
+
+    // Show touch feedback at position
+    function showTouchFeedback(x, y, isMultiTouch = false) {
+      if (!touchFeedback || !trackpadConfig.showTouchFeedback) return;
+
+      touchFeedback.style.left = x + "px";
+      touchFeedback.style.top = y + "px";
+      touchFeedback.style.display = "block";
+      touchFeedback.style.width = isMultiTouch ? "60px" : "40px";
+      touchFeedback.style.height = isMultiTouch ? "60px" : "40px";
+      touchFeedback.style.background = isMultiTouch
+        ? "rgba(255, 100, 100, 0.3)"
+        : "rgba(255, 255, 255, 0.3)";
+      touchFeedback.style.borderColor = isMultiTouch
+        ? "rgba(255, 100, 100, 0.6)"
+        : "rgba(255, 255, 255, 0.6)";
+    }
+
+    // Hide touch feedback
+    function hideTouchFeedback() {
+      if (!touchFeedback) return;
+      touchFeedback.style.display = "none";
+    }
+
+    // Send mouse button event
+    function sendMouseButton(button, action) {
+      const eventType = action === "press" ? "mousedown" : "mouseup";
+      const buttonMap = {
+        left: 0,
+        middle: 1,
+        right: 2,
+      };
+
+      const event = new MouseEvent(eventType, {
+        button: buttonMap[button],
+        buttons: action === "press" ? 1 : 0,
+        bubbles: true,
+        cancelable: true,
+        clientX: lastTouchDown.x,
+        clientY: lastTouchDown.y,
+      });
+
+      logDebug(`Trackpad: ${button.toUpperCase()} mouse ${action}`, {
+        position: { x: lastTouchDown.x, y: lastTouchDown.y },
+        button: button,
+        action: action,
+      });
+
+      document.dispatchEvent(event);
+    }
+
+    // Send mouse move event
+    function sendMouseMove(deltaX, deltaY) {
+      const event = new MouseEvent("mousemove", {
+        movementX: deltaX,
+        movementY: deltaY,
+        bubbles: true,
+        cancelable: true,
+      });
+
+      logDebug(`Trackpad: Mouse move`, {
+        deltaX: deltaX,
+        deltaY: deltaY,
+      });
+
+      document.dispatchEvent(event);
+    }
+
+    // Send scroll event
+    function sendScroll(deltaY) {
+      const event = new WheelEvent("wheel", {
+        deltaY: deltaY,
+        deltaMode: 0, // pixels
+        bubbles: true,
+        cancelable: true,
+      });
+
+      logDebug(`Trackpad: Scroll`, {
+        deltaY: deltaY,
+      });
+
+      document.dispatchEvent(event);
+    }
+
+    // Start long press timer for right-click
+    function startLongPressTimer() {
+      if (longPressTimer) clearTimeout(longPressTimer);
+
+      longPressTimer = setTimeout(() => {
+        logDebug("Trackpad: Long press detected - right click");
+        // Release left click and press right click
+        sendMouseButton("left", "release");
+        sendMouseButton("right", "press");
+      }, trackpadConfig.longPressDelay);
+    }
+
+    // Cancel long press timer
+    function cancelLongPressTimer() {
+      if (longPressTimer) {
+        clearTimeout(longPressTimer);
+        longPressTimer = null;
+      }
+    }
+
+    // Start drag timer
+    function startDragTimer() {
+      if (dragStartTimer) clearTimeout(dragStartTimer);
+
+      dragStartTimer = setTimeout(() => {
+        if (!touchMoved && !isDragging) {
+          logDebug("Trackpad: Drag start detected");
+          isDragging = true;
+          sendMouseButton("left", "press");
+        }
+      }, 650); // Same as iOS implementation
+    }
+
+    // Cancel drag timer
+    function cancelDragTimer() {
+      if (dragStartTimer) {
+        clearTimeout(dragStartTimer);
+        dragStartTimer = null;
+      }
+    }
+
+    // Check if movement is confirmed (not just tremor)
+    function isConfirmedMove(currentX, currentY, originalX, originalY) {
+      const distance = Math.sqrt(
+        Math.pow(currentX - originalX, 2) + Math.pow(currentY - originalY, 2)
+      );
+      return distance >= trackpadConfig.moveConfirmationThreshold;
+    }
+
+    // Calculate average position of all touches
+    function getAverageTouchPosition() {
+      if (activeTouches.size === 0) return null;
+
+      let sumX = 0;
+      let sumY = 0;
+      let count = 0;
+
+      for (const touch of activeTouches.values()) {
+        sumX += touch.clientX;
+        sumY += touch.clientY;
+        count++;
+      }
+
+      return {
+        x: sumX / count,
+        y: sumY / count,
+      };
+    }
+
+    // Event handlers
+    function handleTouchStart(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const touches = Array.from(e.changedTouches);
+      const totalTouches = e.touches.length;
+
+      // Update peak touch count
+      peakTouchCount = Math.max(peakTouchCount, totalTouches);
+
+      // Store all active touches
+      touches.forEach((touch) => {
+        activeTouches.set(touch.identifier, {
+          clientX: touch.clientX,
+          clientY: touch.clientY,
+          startX: touch.clientX,
+          startY: touch.clientY,
+        });
+      });
+
+      // Handle different touch counts
+      if (totalTouches === 1) {
+        const touch = touches[0];
+        const relPos = getRelativePosition(touch.clientX, touch.clientY);
+
+        // Check double-tap deadzone
+        const now = Date.now();
+        const timeSinceLastUp = now - lastTouchUp.timestamp;
+        const distanceFromLastUp = getRelativeDistance(
+          relPos,
+          getRelativePosition(lastTouchUp.x, lastTouchUp.y)
+        );
+
+        if (
+          timeSinceLastUp > trackpadConfig.doubleTapDeadZoneTime ||
+          distanceFromLastUp > trackpadConfig.doubleTapMoveThreshold
+        ) {
+          // Move cursor to touch position
+          lastTouchDown = {
+            timestamp: now,
+            x: touch.clientX,
+            y: touch.clientY,
+          };
+          originalTouchLocation = { x: touch.clientX, y: touch.clientY };
+
+          // Show touch feedback
+          showTouchFeedback(touch.clientX, touch.clientY);
+        }
+
+        // Press left mouse button
+        sendMouseButton("left", "press");
+
+        // Start long press timer for right-click
+        startLongPressTimer();
+
+        // Start drag timer
+        startDragTimer();
+
+        touchMoved = false;
+      } else if (totalTouches === 2 && trackpadConfig.enableTwoFingerScroll) {
+        // Two-finger touch for scrolling
+        const avgPos = getAverageTouchPosition();
+        if (avgPos) {
+          lastAveragePosition = avgPos;
+          originalTouchLocation = { x: avgPos.x, y: avgPos.y };
+          showTouchFeedback(avgPos.x, avgPos.y, true);
+        }
+
+        // Cancel long press since this is multi-touch
+        cancelLongPressTimer();
+        cancelDragTimer();
+      }
+
+      logDebug(`Trackpad: Touch start`, {
+        touchCount: totalTouches,
+        activeTouches: activeTouches.size,
+        peakTouchCount: peakTouchCount,
+      });
+    }
+
+    function handleTouchMove(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const totalTouches = e.touches.length;
+
+      // Update active touches
+      Array.from(e.touches).forEach((touch) => {
+        const existing = activeTouches.get(touch.identifier);
+        if (existing) {
+          existing.clientX = touch.clientX;
+          existing.clientY = touch.clientY;
+        }
+      });
+
+      if (totalTouches === 1) {
+        const touch = Array.from(e.touches)[0];
+        const storedTouch = activeTouches.get(touch.identifier);
+
+        if (storedTouch) {
+          // Check if moved too far for long press
+          const relPos = getRelativePosition(touch.clientX, touch.clientY);
+          const startRelPos = getRelativePosition(
+            storedTouch.startX,
+            storedTouch.startY
+          );
+          const distance = getRelativeDistance(relPos, startRelPos);
+
+          if (distance > trackpadConfig.longPressMoveThreshold) {
+            cancelLongPressTimer();
+          }
+
+          // Calculate movement delta
+          const deltaX =
+            (touch.clientX - lastTouchDown.x) *
+            (trackpadConfig.referenceWidth / window.innerWidth);
+          const deltaY =
+            (touch.clientY - lastTouchDown.y) *
+            (trackpadConfig.referenceHeight / window.innerHeight);
+
+          if (deltaX !== 0 || deltaY !== 0) {
+            // Send mouse movement
+            sendMouseMove(deltaX, deltaY);
+
+            // Update last position
+            lastTouchDown.x = touch.clientX;
+            lastTouchDown.y = touch.clientY;
+
+            // Check if movement is confirmed
+            if (
+              isConfirmedMove(
+                touch.clientX,
+                touch.clientY,
+                originalTouchLocation.x,
+                originalTouchLocation.y
+              )
+            ) {
+              touchMoved = true;
+            }
+          }
+
+          // Update touch feedback
+          showTouchFeedback(touch.clientX, touch.clientY);
+        }
+      } else if (totalTouches === 2 && trackpadConfig.enableTwoFingerScroll) {
+        const avgPos = getAverageTouchPosition();
+        if (avgPos && lastAveragePosition) {
+          // Calculate scroll delta
+          const scrollDelta =
+            (avgPos.y - lastAveragePosition.y) *
+            trackpadConfig.scrollSensitivity;
+
+          if (scrollDelta !== 0) {
+            sendScroll(scrollDelta);
+          }
+
+          // Check if movement is confirmed
+          if (
+            isConfirmedMove(
+              avgPos.x,
+              avgPos.y,
+              originalTouchLocation.x,
+              originalTouchLocation.y
+            )
+          ) {
+            touchMoved = true;
+          }
+
+          // Update touch feedback
+          showTouchFeedback(avgPos.x, avgPos.y, true);
+          lastAveragePosition = avgPos;
+        }
+      }
+    }
+
+    function handleTouchEnd(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const totalTouches = e.touches.length;
+      const endedTouches = Array.from(e.changedTouches);
+
+      // Remove ended touches
+      endedTouches.forEach((touch) => {
+        activeTouches.delete(touch.identifier);
+      });
+
+      // Cancel timers
+      cancelLongPressTimer();
+      cancelDragTimer();
+
+      if (totalTouches === 0) {
+        // All touches ended
+
+        if (isDragging) {
+          isDragging = false;
+          sendMouseButton("left", "release");
+        } else if (!touchMoved) {
+          // Single tap behavior
+          if (peakTouchCount === 2) {
+            // Two-finger tap = right click
+            logDebug("Trackpad: Two-finger tap - right click");
+            sendMouseButton("right", "press");
+            setTimeout(() => sendMouseButton("right", "release"), 100);
+          } else if (peakTouchCount === 1) {
+            // Single tap = left click
+            logDebug("Trackpad: Single tap - left click");
+            if (!isDragging) {
+              sendMouseButton("left", "press");
+              setTimeout(() => sendMouseButton("left", "release"), 100);
+            }
+            isDragging = false;
+            sendMouseButton("left", "release");
+          }
+        }
+
+        // Always release buttons
+        sendMouseButton("left", "release");
+        sendMouseButton("right", "release");
+
+        // Store last touch up for double-tap detection
+        if (endedTouches.length > 0) {
+          const touch = endedTouches[0];
+          lastTouchUp = {
+            timestamp: Date.now(),
+            x: touch.clientX,
+            y: touch.clientY,
+          };
+        }
+
+        // Hide touch feedback
+        hideTouchFeedback();
+
+        // Reset state
+        peakTouchCount = 0;
+        touchMoved = false;
+
+        logDebug("Trackpad: All touches ended", {
+          wasDragging: isDragging,
+          touchMoved: touchMoved,
+          peakTouchCount: peakTouchCount,
+        });
+      } else if (totalTouches === 1) {
+        // Moving from 2+ touches to 1
+        const remainingTouch = Array.from(e.touches)[0];
+        const storedTouch = activeTouches.get(remainingTouch.identifier);
+
+        if (storedTouch) {
+          lastTouchDown.x = storedTouch.clientX;
+          lastTouchDown.y = storedTouch.clientY;
+
+          // Mark as moved to prevent accidental click
+          touchMoved = true;
+
+          // Update touch feedback
+          showTouchFeedback(storedTouch.clientX, storedTouch.clientY);
+        }
+      }
+    }
+
+    function handleTouchCancel(e) {
+      // Treat same as touch end
+      handleTouchEnd(e);
+    }
+
+    // Add event listeners
+    trackpad.addEventListener("touchstart", handleTouchStart, {
+      passive: false,
+    });
+    trackpad.addEventListener("touchmove", handleTouchMove, { passive: false });
+    trackpad.addEventListener("touchend", handleTouchEnd, { passive: false });
+    trackpad.addEventListener("touchcancel", handleTouchCancel, {
+      passive: false,
+    });
+
+    // Public methods
+    trackpad.enable = function () {
+      trackpad.style.display = "block";
+      logDebug("Touch-to-mouse trackpad ENABLED");
+    };
+
+    trackpad.disable = function () {
+      trackpad.style.display = "none";
+
+      // Clean up any active state
+      cancelLongPressTimer();
+      cancelDragTimer();
+      activeTouches.clear();
+      hideTouchFeedback();
+
+      // Release any held buttons
+      if (isDragging) {
+        sendMouseButton("left", "release");
+        isDragging = false;
+      }
+      sendMouseButton("right", "release");
+
+      logDebug("Touch-to-mouse trackpad DISABLED");
+    };
+
+    trackpad.isEnabled = function () {
+      return trackpad.style.display === "block";
+    };
+
+    trackpad.getConfig = function () {
+      return { ...trackpadConfig };
+    };
+
+    trackpad.setConfig = function (newConfig) {
+      Object.assign(trackpadConfig, newConfig);
+      logDebug("Trackpad config updated", newConfig);
+    };
+
+    // Clean up function
+    trackpad.cleanup = function () {
+      trackpad.removeEventListener("touchstart", handleTouchStart);
+      trackpad.removeEventListener("touchmove", handleTouchMove);
+      trackpad.removeEventListener("touchend", handleTouchEnd);
+      trackpad.removeEventListener("touchcancel", handleTouchCancel);
+
+      cancelLongPressTimer();
+      cancelDragTimer();
+
+      if (touchFeedback && touchFeedback.parentNode) {
+        touchFeedback.parentNode.removeChild(touchFeedback);
+      }
+
+      if (trackpad.parentNode) {
+        trackpad.parentNode.removeChild(trackpad);
+      }
+    };
+
+    logDebug("Touch-to-mouse trackpad created", {
+      config: trackpadConfig,
+      features: [
+        "Single finger drag = mouse movement",
+        "Single tap = left click",
+        "Long press = right click",
+        "Two finger drag = scroll",
+        "Two finger tap = right click",
+        "Visual touch feedback",
+      ],
+    });
+
+    return trackpad;
+  }
+
   // ================ INITIALIZATION ================
 
   function init() {
@@ -3576,6 +4182,9 @@
 
     // Load current profile
     switchProfile(config.defaultProfile);
+
+    // Create touch-to-mouse trackpad (but don't enable it yet)
+    window.touchTrackpad = createTouchToMouseTrackpad();
 
     // Create enable button
     // Create top buttons wrapper
@@ -3652,6 +4261,9 @@
     disable: () => {
       if (isEnabled) toggleVirtualGamepad();
     },
+    toggleVirtualGamepad: () => {
+      toggleVirtualGamepad();
+    },
     calibrate: showCalibrationDialog,
     setProfile: switchProfile,
     getConfig: () => ({ ...config }),
@@ -3669,6 +4281,20 @@
     disableDebug: () => {
       config.debugMode = false;
       console.log("🎮 Debug mode disabled");
+    },
+    enableTouchTrackpad: () => {
+      if (window.touchTrackpad) {
+        window.touchTrackpad.enable();
+        return true;
+      }
+      return false;
+    },
+    disableTouchTrackpad: () => {
+      if (window.touchTrackpad) {
+        window.touchTrackpad.disable();
+        return true;
+      }
+      return false;
     },
     showStatus: () => {
       console.log("=== VIRTUAL GAMEPAD STATUS ===");
