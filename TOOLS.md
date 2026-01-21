@@ -37,3 +37,16 @@ VoiceTranscoder -> voice chat in Quake3(not yet implemented)
 Quake 3 Movie Maker Edition -> record cool movies within Quake3
 
 Quake3 ROQ movie maker -> mp4 to q3 .roq video file transcoder
+
+Tutorials
+https://web.archive.org/web/20011031150016/www.quake3world.com/ubb/Forum11/HTML/001100.html
+
+https://web.archive.org/web/20011216231801/http://www.gradientstudios.com/3dexe/
+
+https://web.archive.org/web/20011102071933/http://www.swissquake.ch/chumbalum-soft/ms3d/tutorials.html
+
+https://web.archive.org/web/20011123073404/http://www.machinima.com/articles/modelling_intro_5/index.shtml
+
+https://web.archive.org/web/20011129151921/http://www.titaniumfrag.freeserve.co.uk/
+
+https://lvlworld.com/topmaps/3

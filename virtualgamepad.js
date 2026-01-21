@@ -1231,44 +1231,49 @@
         justify-content: center;
     `;
 
-    // Create invisible input field
+    // Create invisible input field for mobile keyboard
     let keyboardInput = null;
     let isKeyboardActive = false;
+    let keyPressTimeout = null;
 
-    // Function to create and focus input field
-    function openKeyboard() {
+    // Create the invisible input element
+    function createKeyboardInput() {
       if (!keyboardInput) {
-        // Create invisible input
         keyboardInput = document.createElement("input");
         keyboardInput.type = "text";
-        keyboardInput.style.cssText = `
-                position: fixed;
-                left: 50%;
-                top: 50%;
-                transform: translate(-50%, -50%);
-                width: 100px;
-                height: 40px;
-                background: transparent;
-                color: transparent;
-                border: none;
-                outline: none;
-                caret-color: transparent;
-                font-size: 1px;
-                opacity: 0.01;
-                z-index: ${config.zIndex + 100};
-                pointer-events: auto;
-            `;
-
-        // Prevent auto-correct and suggestions
         keyboardInput.setAttribute("autocapitalize", "off");
         keyboardInput.setAttribute("autocorrect", "off");
         keyboardInput.setAttribute("autocomplete", "off");
         keyboardInput.setAttribute("spellcheck", "false");
         keyboardInput.setAttribute("inputmode", "text");
 
+        // Make it invisible but focusable
+        keyboardInput.style.cssText = `
+                position: fixed;
+                left: -1000px;
+                top: -1000px;
+                width: 1px;
+                height: 1px;
+                opacity: 0.01;
+                pointer-events: none;
+                font-size: 1px;
+                background: transparent;
+                border: none;
+                outline: none;
+                caret-color: transparent;
+                color: transparent;
+                z-index: -9999;
+            `;
+
         document.body.appendChild(keyboardInput);
-        logDebug("Keyboard input field created");
+        logDebug("Invisible keyboard input created");
       }
+      return keyboardInput;
+    }
+
+    // Function to show keyboard and start listening
+    function openKeyboard() {
+      createKeyboardInput();
 
       if (!isKeyboardActive) {
         isKeyboardActive = true;
@@ -1277,21 +1282,20 @@
         keyboardButton.style.background = "rgba(255, 102, 204, 0.8)";
         keyboardButton.style.borderColor = "#ff00ff";
         keyboardButton.style.boxShadow = "0 0 15px #ff66cc";
+        keyboardButton.style.transform = "scale(1.1)";
 
-        // Focus the input to open keyboard
+        // Focus the input to open mobile keyboard
         setTimeout(() => {
           keyboardInput.focus();
-          keyboardInput.value = ""; // Clear any existing text
-
           // For iOS, we need to click it too
           keyboardInput.click();
+          keyboardInput.value = ""; // Clear any existing text
 
-          logDebug("Keyboard input focused");
+          logDebug("Mobile keyboard opened (input focused)");
         }, 100);
 
-        showNotification(
-          "⌨️ Keyboard active - Type on your device keyboard",
-          "#ff66cc"
+        showKeyboardNotification(
+          "⌨️ Keyboard active - Type on your device keyboard"
         );
       } else {
         closeKeyboard();
@@ -1300,52 +1304,57 @@
 
     // Function to close keyboard
     function closeKeyboard() {
-      if (isKeyboardActive && keyboardInput) {
+      if (isKeyboardActive) {
         isKeyboardActive = false;
 
         // Visual feedback
         keyboardButton.style.background = "rgba(0, 0, 0, 0.8)";
         keyboardButton.style.borderColor = "#ff66cc";
         keyboardButton.style.boxShadow = "none";
+        keyboardButton.style.transform = "scale(1)";
 
-        // Blur and hide input
-        keyboardInput.blur();
-        keyboardInput.value = "";
+        if (keyboardInput) {
+          keyboardInput.blur();
+          keyboardInput.value = "";
+        }
 
-        showNotification("⌨️ Keyboard closed", "#888");
-
-        logDebug("Keyboard input blurred");
+        showKeyboardNotification("⌨️ Keyboard closed", "#888");
+        logDebug("Mobile keyboard closed");
       }
     }
 
-    // Function to handle key input
-    function handleKeyPress(key) {
+    // Function to handle key input from mobile keyboard
+    function handleKeyInput(key) {
       if (!isKeyboardActive) return;
+
+      // Clear previous timeout
+      if (keyPressTimeout) {
+        clearTimeout(keyPressTimeout);
+      }
 
       // Send key press event
       sendKeyEvent(key, "down");
 
       // Auto-release after short delay (simulating key press)
-      setTimeout(() => {
+      keyPressTimeout = setTimeout(() => {
         sendKeyEvent(key, "up");
       }, 50);
 
       // Visual feedback on button
       keyboardButton.style.transform = "scale(0.95)";
       setTimeout(() => {
-        keyboardButton.style.transform = "scale(1)";
+        keyboardButton.style.transform = "scale(1.1)";
       }, 100);
 
-      // Show notification for special keys
-      if (key.length === 1) {
-        showNotification(`Key: "${key}"`, "#00ff00", 1000);
-      } else {
-        showNotification(`Key: ${key}`, "#00ff00", 1000);
-      }
+      // Show notification
+      showKeyboardNotification(`Typed: "${key}"`, "#00ff00", 1000);
 
-      logDebug("Keyboard key pressed", { key: key });
+      logDebug("Mobile keyboard input detected", {
+        key: key,
+        timestamp: Date.now(),
+      });
 
-      // Clear input for next key
+      // Clear input for next key (important for mobile keyboards)
       if (keyboardInput) {
         setTimeout(() => {
           keyboardInput.value = "";
@@ -1354,10 +1363,18 @@
     }
 
     // Function to show notification
-    function showNotification(message, color = "#ff66cc", duration = 2000) {
+    function showKeyboardNotification(
+      message,
+      color = "#ff66cc",
+      duration = 2000
+    ) {
       // Remove existing notification
-      const existing = document.getElementById("keyboard-notification");
-      if (existing) existing.remove();
+      const existingNotification = document.getElementById(
+        "keyboard-notification"
+      );
+      if (existingNotification) {
+        existingNotification.remove();
+      }
 
       // Create new notification
       const notification = document.createElement("div");
@@ -1402,139 +1419,154 @@
 
       // Auto-remove
       setTimeout(() => {
-        if (notification.parentNode) notification.remove();
+        if (notification.parentNode) {
+          notification.remove();
+        }
       }, duration);
     }
 
-    // Event listeners for button
-    keyboardButton.addEventListener("click", openKeyboard);
+    // Set up event listeners for the button
+    keyboardButton.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      openKeyboard();
+    });
+
     keyboardButton.addEventListener("touchstart", (e) => {
       e.preventDefault();
+      e.stopPropagation();
       openKeyboard();
     });
 
-    // Set up key listeners after DOM is ready
-    document.addEventListener("DOMContentLoaded", () => {
-      // Create input immediately so it's ready
-      openKeyboard();
-      closeKeyboard(); // Start with it closed
+    // Create input and set up listeners immediately
+    createKeyboardInput();
 
-      if (keyboardInput) {
-        // Listen for input events (for mobile virtual keyboard)
-        keyboardInput.addEventListener("input", (e) => {
-          if (!isKeyboardActive) return;
+    if (keyboardInput) {
+      // Listen for input events (catches mobile virtual keyboard typing)
+      keyboardInput.addEventListener("input", (e) => {
+        if (!isKeyboardActive) return;
 
-          const value = e.target.value;
-          if (value) {
-            // Get the last character typed
-            const key = value.charAt(value.length - 1);
-            handleKeyPress(key.toLowerCase());
+        const value = e.target.value;
+        if (value && value.length > 0) {
+          // Get the last character typed (for multi-character inputs like autocorrect)
+          const lastChar = value.charAt(value.length - 1);
+          handleKeyInput(lastChar.toLowerCase());
 
-            // Clear immediately
-            e.target.value = "";
-          }
-        });
+          // Clear input immediately for next character
+          e.target.value = "";
+        }
+      });
 
-        // Listen for keydown events (for physical keyboard)
-        keyboardInput.addEventListener("keydown", (e) => {
-          if (!isKeyboardActive) return;
+      // Listen for keydown events (catches physical keyboard on desktop)
+      keyboardInput.addEventListener("keydown", (e) => {
+        if (!isKeyboardActive) return;
 
+        e.preventDefault();
+        e.stopPropagation();
+
+        let key = e.key;
+
+        // Map special keys
+        const specialKeys = {
+          " ": " ",
+          Enter: "enter",
+          Tab: "tab",
+          Escape: "esc",
+          Backspace: "backspace",
+          Delete: "delete",
+          Control: "ctrl",
+          Shift: "shift",
+          Alt: "alt",
+          Meta: "meta",
+          ArrowUp: "ArrowUp",
+          ArrowDown: "ArrowDown",
+          ArrowLeft: "ArrowLeft",
+          ArrowRight: "ArrowRight",
+          CapsLock: "capslock",
+          Home: "home",
+          End: "end",
+          PageUp: "pageup",
+          PageDown: "pagedown",
+          Insert: "insert",
+          F1: "f1",
+          F2: "f2",
+          F3: "f3",
+          F4: "f4",
+          F5: "f5",
+          F6: "f6",
+          F7: "f7",
+          F8: "f8",
+          F9: "f9",
+          F10: "f10",
+          F11: "f11",
+          F12: "f12",
+        };
+
+        if (specialKeys[key]) {
+          key = specialKeys[key];
+        }
+
+        // Only handle valid keys (single characters or special keys)
+        if (key.length === 1 || specialKeys[e.key]) {
+          handleKeyInput(key.toLowerCase());
+        }
+      });
+
+      // Listen for keyup to prevent default
+      keyboardInput.addEventListener("keyup", (e) => {
+        if (isKeyboardActive) {
           e.preventDefault();
           e.stopPropagation();
+        }
+      });
 
-          let key = e.key;
+      // Listen for composition events (for languages with IME)
+      keyboardInput.addEventListener("compositionstart", () => {
+        logDebug("IME composition started");
+      });
 
-          // Map special keys
-          const specialKeys = {
-            " ": " ",
-            Enter: "enter",
-            Tab: "tab",
-            Escape: "esc",
-            Backspace: "backspace",
-            Delete: "delete",
-            Control: "ctrl",
-            Shift: "shift",
-            Alt: "alt",
-            Meta: "meta",
-            ArrowUp: "ArrowUp",
-            ArrowDown: "ArrowDown",
-            ArrowLeft: "ArrowLeft",
-            ArrowRight: "ArrowRight",
-            CapsLock: "capslock",
-            Home: "home",
-            End: "end",
-            PageUp: "pageup",
-            PageDown: "pagedown",
-            Insert: "insert",
-            F1: "f1",
-            F2: "f2",
-            F3: "f3",
-            F4: "f4",
-            F5: "f5",
-            F6: "f6",
-            F7: "f7",
-            F8: "f8",
-            F9: "f9",
-            F10: "f10",
-            F11: "f11",
-            F12: "f12",
-          };
+      keyboardInput.addEventListener("compositionend", (e) => {
+        if (!isKeyboardActive) return;
 
-          if (specialKeys[key]) {
-            key = specialKeys[key];
-          }
+        const text = e.data;
+        if (text && text.length > 0) {
+          // For IME input, we might want to handle it differently
+          // For now, just take the last character
+          const lastChar = text.charAt(text.length - 1);
+          handleKeyInput(lastChar.toLowerCase());
+        }
+      });
+    }
 
-          // Only handle valid keys
-          if (key.length === 1 || specialKeys[e.key]) {
-            handleKeyPress(key.toLowerCase());
-          }
-
-          return false;
-        });
-
-        // Prevent default behavior on keyup
-        keyboardInput.addEventListener("keyup", (e) => {
-          if (isKeyboardActive) {
-            e.preventDefault();
-            e.stopPropagation();
-          }
-        });
-
-        // Close keyboard when clicking outside
-        document.addEventListener("click", (e) => {
-          if (
-            isKeyboardActive &&
-            e.target !== keyboardButton &&
-            e.target !== keyboardInput
-          ) {
-            closeKeyboard();
-          }
-        });
-
-        // Close keyboard on page unload
-        window.addEventListener("beforeunload", () => {
-          closeKeyboard();
-        });
-
-        // Handle touch events on mobile
-        document.addEventListener("touchstart", (e) => {
-          if (
-            isKeyboardActive &&
-            e.target !== keyboardButton &&
-            e.target !== keyboardInput
-          ) {
-            closeKeyboard();
-          }
-        });
+    // Close keyboard when clicking/touching outside
+    document.addEventListener("click", (e) => {
+      if (
+        isKeyboardActive &&
+        e.target !== keyboardButton &&
+        e.target !== keyboardInput
+      ) {
+        closeKeyboard();
       }
     });
+
+    document.addEventListener("touchstart", (e) => {
+      if (
+        isKeyboardActive &&
+        e.target !== keyboardButton &&
+        e.target !== keyboardInput
+      ) {
+        closeKeyboard();
+      }
+    });
+
+    // Close keyboard on page unload
+    window.addEventListener("beforeunload", closeKeyboard);
 
     // Add to wrapper
     wrapper.appendChild(keyboardButton);
     logDebug("Keyboard button created with invisible input field");
     return keyboardButton;
   }
-
   // ================ UPDATED CALIBRATION BUTTON ================
 
   function createCalibrationButton(wrapper) {
