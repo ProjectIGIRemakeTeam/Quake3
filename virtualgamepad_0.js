@@ -29,239 +29,7 @@
     joystickOutlineColor: "rgba(255, 255, 255, 0.5)",
     joystickNubColor: "rgba(255, 255, 255, 0.9)",
     enableMobileKeyboardSupport: true,
-    debugMode: true,
-    // NEW: Layout configuration
-    layoutConfig: {
-      version: "1.0.0",
-      name: "default",
-      global: {
-        zIndex: 99999990,
-        buttonOpacity: 0.7,
-        defaultProfile: "quake3",
-        debugMode: true,
-      },
-      layout: {
-        type: "split",
-        orientation: "landscape",
-        enableAutoPositioning: true,
-        positions: {
-          topButtons: {
-            position: "fixed",
-            top: "20px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            display: "flex",
-            gap: "15px",
-          },
-          leftJoystick: {
-            position: "absolute",
-            side: "left",
-            verticalAlign: "bottom",
-            horizontalOffset: "30px",
-            verticalOffset: "30px",
-            width: "150px",
-            height: "150px",
-          },
-          rightJoystick: {
-            position: "absolute",
-            side: "right",
-            verticalAlign: "bottom",
-            horizontalOffset: "30px",
-            verticalOffset: "30px",
-            width: "150px",
-            height: "150px",
-          },
-          faceButtons: {
-            position: "absolute",
-            side: "right",
-            verticalAlign: "top",
-            horizontalOffset: "30px",
-            verticalOffset: "30px",
-            width: "150px",
-            height: "150px",
-            buttonSpacing: "60px",
-          },
-          dpad: {
-            position: "absolute",
-            side: "left",
-            verticalAlign: "top",
-            horizontalOffset: "30px",
-            verticalOffset: "30px",
-            width: "120px",
-            height: "120px",
-          },
-          systemButtons: {
-            position: "absolute",
-            horizontalAlign: "center",
-            verticalAlign: "bottom",
-            verticalOffset: "80px",
-            buttonSpacing: "20px",
-          },
-          leftShoulder: {
-            position: "absolute",
-            side: "left",
-            verticalAlign: "center",
-            horizontalOffset: "20px",
-            verticalOffset: "-60px",
-            buttonSpacing: "10px",
-            buttonSize: "55px",
-          },
-          rightShoulder: {
-            position: "absolute",
-            side: "right",
-            verticalAlign: "center",
-            horizontalOffset: "20px",
-            verticalOffset: "-60px",
-            buttonSpacing: "10px",
-            buttonSize: "55px",
-          },
-        },
-      },
-      sizes: {
-        enableButton: {
-          width: "60px",
-          height: "60px",
-        },
-        calibrationButton: {
-          width: "60px",
-          height: "60px",
-        },
-        qrButton: {
-          width: "60px",
-          height: "60px",
-        },
-        keyboardButton: {
-          width: "60px",
-          height: "60px",
-        },
-        systemButtons: {
-          width: "80px",
-          height: "40px",
-        },
-        joystick: {
-          areaSize: "150px",
-          nubSize: "40%",
-          deadZone: 0.3,
-          maxDistance: "35%",
-        },
-        faceButtons: {
-          clusterRadius: "75px",
-          buttonScale: "0.33",
-        },
-        dpad: {
-          clusterRadius: "60px",
-          buttonScale: "0.33",
-        },
-      },
-      colors: {
-        theme: "dark",
-        buttons: {
-          enableButton: {
-            background: "rgba(0, 0, 0, 0.8)",
-            border: "#00aaff",
-            text: "#ffffff",
-          },
-          calibrationButton: {
-            background: "rgba(0, 0, 0, 0.8)",
-            border: "#ffaa00",
-            text: "#ffffff",
-          },
-          qrButton: {
-            background: "rgba(0, 0, 0, 0.8)",
-            border: "#ff66cc",
-            text: "#ffffff",
-          },
-          keyboardButton: {
-            background: "rgba(0, 0, 0, 0.8)",
-            border: "#ff66cc",
-            text: "#ffffff",
-          },
-          systemButtons: {
-            background: "rgba(0, 0, 0, 0.7)",
-            border: "#666666",
-            text: "#ffffff",
-          },
-          faceButtons: {
-            cluster: "#333333",
-            buttons: "#666666",
-            active: "#ffffff",
-          },
-          dpad: {
-            cluster: "#333333",
-            buttons: "#666666",
-            active: "#ffffff",
-          },
-          shoulderButtons: {
-            L1: "#ff6b6b",
-            L2: "#ff8e53",
-            R1: "#6b9fff",
-            R2: "#53b8ff",
-            background: "rgba(0, 0, 0, 0.7)",
-          },
-        },
-        joysticks: {
-          background: "rgba(0, 0, 0, 0.7)",
-          border: "rgba(255, 255, 255, 0.5)",
-          nub: "rgba(255, 255, 255, 0.9)",
-          label: "#ffffff",
-          arrows: "rgba(255, 255, 255, 0.3)",
-        },
-        overlay: {
-          debug: "#00ff00",
-          notification: "#ff66cc",
-          success: "#00ff00",
-          warning: "#ffaa00",
-          error: "#ff0000",
-        },
-      },
-      behavior: {
-        joystick: {
-          deadZone: 0.3,
-          sensitivity: 2.5,
-          clickableThumbsticks: true,
-          doubleTapThreshold: 300,
-        },
-        buttons: {
-          showLabels: true,
-          vibration: false,
-          pressAnimation: true,
-          releaseAnimation: true,
-        },
-        touch: {
-          longPressDelay: 650,
-          doubleTapThreshold: 300,
-          moveThreshold: 5,
-        },
-        keyboard: {
-          enableMobileSupport: true,
-          autoFocus: true,
-        },
-      },
-      visibility: {
-        showCalibrationButton: true,
-        showJoystickOutline: true,
-        showButtonLabels: true,
-        showTouchFeedback: true,
-        includeShoulderButtons: true,
-      },
-      presets: {
-        default: {
-          layoutType: "split",
-          sizes: "medium",
-          colors: "dark",
-        },
-        compact: {
-          layoutType: "overlay",
-          sizes: "small",
-          colors: "transparent",
-        },
-        minimal: {
-          layoutType: "joysticks-only",
-          sizes: "large",
-          colors: "dark",
-        },
-      },
-    },
+    debugMode: true, // NEW: Enable detailed console logging
   };
 
   // Default game profiles
@@ -354,220 +122,7 @@
   let enableButton = null;
   let overlay = null;
   let calibrationDialog = null;
-  let mobileTextInput = null;
-
-  // ================ LAYOUT CONFIG MANAGEMENT ================
-
-  function applyLayoutStyles(element, layoutConfig) {
-    if (!element || !layoutConfig) return;
-
-    const style = element.style;
-
-    // Apply position
-    if (layoutConfig.position) {
-      style.position = layoutConfig.position;
-    }
-
-    // Apply coordinates
-    if (layoutConfig.top !== undefined) style.top = layoutConfig.top;
-    if (layoutConfig.left !== undefined) style.left = layoutConfig.left;
-    if (layoutConfig.right !== undefined) style.right = layoutConfig.right;
-    if (layoutConfig.bottom !== undefined) style.bottom = layoutConfig.bottom;
-
-    // Apply size
-    if (layoutConfig.width !== undefined) style.width = layoutConfig.width;
-    if (layoutConfig.height !== undefined) style.height = layoutConfig.height;
-
-    // Apply transforms
-    if (layoutConfig.transform !== undefined)
-      style.transform = layoutConfig.transform;
-
-    // Apply display
-    if (layoutConfig.display !== undefined)
-      style.display = layoutConfig.display;
-
-    // Apply other CSS properties
-    if (layoutConfig.gap !== undefined) style.gap = layoutConfig.gap;
-    if (layoutConfig.zIndex !== undefined) style.zIndex = layoutConfig.zIndex;
-
-    logDebug(
-      `Applied layout styles to ${element.className || element.id}`,
-      layoutConfig
-    );
-  }
-
-  function updateControlPositions() {
-    if (!overlay || !config.layoutConfig) return;
-
-    const layout = config.layoutConfig.layout.positions;
-
-    // Update top buttons wrapper
-    const topWrapper = document.getElementById("virtualgamepad-top-buttons");
-    if (topWrapper && layout.topButtons) {
-      applyLayoutStyles(topWrapper, layout.topButtons);
-    }
-
-    // Update left joystick
-    const leftJoystick = document.querySelector(".joystick-left");
-    if (leftJoystick && layout.leftJoystick) {
-      applyLayoutStyles(leftJoystick, {
-        position: layout.leftJoystick.position || "absolute",
-        left:
-          layout.leftJoystick.side === "left"
-            ? layout.leftJoystick.horizontalOffset
-            : undefined,
-        right:
-          layout.leftJoystick.side === "right"
-            ? layout.leftJoystick.horizontalOffset
-            : undefined,
-        top:
-          layout.leftJoystick.verticalAlign === "top"
-            ? layout.leftJoystick.verticalOffset
-            : undefined,
-        bottom:
-          layout.leftJoystick.verticalAlign === "bottom"
-            ? layout.leftJoystick.verticalOffset
-            : undefined,
-        width: layout.leftJoystick.width,
-        height: layout.leftJoystick.height,
-      });
-    }
-
-    // Update right joystick
-    const rightJoystick = document.querySelector(".joystick-right");
-    if (rightJoystick && layout.rightJoystick) {
-      applyLayoutStyles(rightJoystick, {
-        position: layout.rightJoystick.position || "absolute",
-        left:
-          layout.rightJoystick.side === "left"
-            ? layout.rightJoystick.horizontalOffset
-            : undefined,
-        right:
-          layout.rightJoystick.side === "right"
-            ? layout.rightJoystick.horizontalOffset
-            : undefined,
-        top:
-          layout.rightJoystick.verticalAlign === "top"
-            ? layout.rightJoystick.verticalOffset
-            : undefined,
-        bottom:
-          layout.rightJoystick.verticalAlign === "bottom"
-            ? layout.rightJoystick.verticalOffset
-            : undefined,
-        width: layout.rightJoystick.width,
-        height: layout.rightJoystick.height,
-      });
-    }
-
-    // Update face buttons
-    const faceButtons = document.querySelector(".face-buttons");
-    if (faceButtons && layout.faceButtons) {
-      applyLayoutStyles(faceButtons, {
-        position: layout.faceButtons.position || "absolute",
-        left:
-          layout.faceButtons.side === "left"
-            ? layout.faceButtons.horizontalOffset
-            : undefined,
-        right:
-          layout.faceButtons.side === "right"
-            ? layout.faceButtons.horizontalOffset
-            : undefined,
-        top:
-          layout.faceButtons.verticalAlign === "top"
-            ? layout.faceButtons.verticalOffset
-            : undefined,
-        bottom:
-          layout.faceButtons.verticalAlign === "bottom"
-            ? layout.faceButtons.verticalOffset
-            : undefined,
-        width: layout.faceButtons.width,
-        height: layout.faceButtons.height,
-      });
-    }
-
-    // Update D-pad
-    const dpad = document.querySelector(".dpad-container");
-    if (dpad && layout.dpad) {
-      applyLayoutStyles(dpad, {
-        position: layout.dpad.position || "absolute",
-        left:
-          layout.dpad.side === "left"
-            ? layout.dpad.horizontalOffset
-            : undefined,
-        right:
-          layout.dpad.side === "right"
-            ? layout.dpad.horizontalOffset
-            : undefined,
-        top:
-          layout.dpad.verticalAlign === "top"
-            ? layout.dpad.verticalOffset
-            : undefined,
-        bottom:
-          layout.dpad.verticalAlign === "bottom"
-            ? layout.dpad.verticalOffset
-            : undefined,
-        width: layout.dpad.width,
-        height: layout.dpad.height,
-      });
-    }
-
-    // Update system buttons
-    const systemButtons = document.querySelector(".system-buttons");
-    if (systemButtons && layout.systemButtons) {
-      applyLayoutStyles(systemButtons, {
-        position: layout.systemButtons.position || "absolute",
-        left:
-          layout.systemButtons.horizontalAlign === "left"
-            ? "20px"
-            : layout.systemButtons.horizontalAlign === "center"
-            ? "50%"
-            : undefined,
-        right:
-          layout.systemButtons.horizontalAlign === "right" ? "20px" : undefined,
-        top:
-          layout.systemButtons.verticalAlign === "top"
-            ? layout.systemButtons.verticalOffset
-            : undefined,
-        bottom:
-          layout.systemButtons.verticalAlign === "bottom"
-            ? layout.systemButtons.verticalOffset
-            : undefined,
-        transform:
-          layout.systemButtons.horizontalAlign === "center"
-            ? "translateX(-50%)"
-            : undefined,
-      });
-    }
-
-    // Update shoulder buttons
-    const leftShoulder = document.querySelector(".shoulder-buttons-left");
-    if (leftShoulder && layout.leftShoulder) {
-      applyLayoutStyles(leftShoulder, {
-        position: layout.leftShoulder.position || "absolute",
-        left: layout.leftShoulder.horizontalOffset,
-        top:
-          layout.leftShoulder.verticalAlign === "center"
-            ? `calc(50% ${layout.leftShoulder.verticalOffset})`
-            : undefined,
-        gap: layout.leftShoulder.buttonSpacing,
-      });
-    }
-
-    const rightShoulder = document.querySelector(".shoulder-buttons-right");
-    if (rightShoulder && layout.rightShoulder) {
-      applyLayoutStyles(rightShoulder, {
-        position: layout.rightShoulder.position || "absolute",
-        right: layout.rightShoulder.horizontalOffset,
-        top:
-          layout.rightShoulder.verticalAlign === "center"
-            ? `calc(50% ${layout.rightShoulder.verticalOffset})`
-            : undefined,
-        gap: layout.rightShoulder.buttonSpacing,
-      });
-    }
-
-    logDebug("Control positions updated with layout config");
-  }
+  let mobileTextInput = null; // NEW: Mobile keyboard support
 
   // ================ LOGGING FUNCTIONS ================
 
@@ -1570,29 +1125,12 @@
 
     qrButton.appendChild(svgIcon);
     qrButton.title = "Share QR Code";
-
-    // Apply layout config if available
-    const layoutConfig = config.layoutConfig;
-    const buttonSize =
-      layoutConfig && layoutConfig.sizes && layoutConfig.sizes.qrButton
-        ? layoutConfig.sizes.qrButton
-        : { width: "60px", height: "60px" };
-
-    const buttonColors =
-      layoutConfig && layoutConfig.colors && layoutConfig.colors.buttons
-        ? layoutConfig.colors.buttons.qrButton
-        : {
-            background: "rgba(0, 0, 0, 0.8)",
-            border: "#ff66cc",
-            text: "#ffffff",
-          };
-
     qrButton.style.cssText = `
-        width: ${buttonSize.width};
-        height: ${buttonSize.height};
-        background: ${buttonColors.background};
-        color: ${buttonColors.text};
-        border: 2px solid ${buttonColors.border};
+        width: ${config.buttonSize}px;
+        height: ${config.buttonSize}px;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        border: 2px solid #ff66cc;
         border-radius: 2px;
         font-size: 20px;
         cursor: pointer;
@@ -1632,29 +1170,12 @@
     enableButton = document.createElement("button");
     enableButton.innerHTML = config.enableButtonText;
     enableButton.title = "Toggle Virtual Gamepad";
-
-    // Apply layout config if available
-    const layoutConfig = config.layoutConfig;
-    const buttonSize =
-      layoutConfig && layoutConfig.sizes && layoutConfig.sizes.enableButton
-        ? layoutConfig.sizes.enableButton
-        : { width: "60px", height: "60px" };
-
-    const buttonColors =
-      layoutConfig && layoutConfig.colors && layoutConfig.colors.buttons
-        ? layoutConfig.colors.buttons.enableButton
-        : {
-            background: "rgba(0, 0, 0, 0.8)",
-            border: "#00aaff",
-            text: "#ffffff",
-          };
-
     enableButton.style.cssText = `
-        width: ${buttonSize.width};
-        height: ${buttonSize.height};
-        background: ${buttonColors.background};
-        color: ${buttonColors.text};
-        border: 2px solid ${buttonColors.border};
+        width: ${config.buttonSize}px;
+        height: ${config.buttonSize}px;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        border: 2px solid #00aaff;
         border-radius: 5px;
         font-size: 24px;
         cursor: pointer;
@@ -1681,29 +1202,12 @@
     const keyboardButton = document.createElement("button");
     keyboardButton.innerHTML = "⌨️";
     keyboardButton.title = "Open Device Keyboard";
-
-    // Apply layout config if available
-    const layoutConfig = config.layoutConfig;
-    const buttonSize =
-      layoutConfig && layoutConfig.sizes && layoutConfig.sizes.keyboardButton
-        ? layoutConfig.sizes.keyboardButton
-        : { width: "60px", height: "60px" };
-
-    const buttonColors =
-      layoutConfig && layoutConfig.colors && layoutConfig.colors.buttons
-        ? layoutConfig.colors.buttons.keyboardButton
-        : {
-            background: "rgba(0, 0, 0, 0.8)",
-            border: "#ff66cc",
-            text: "#ffffff",
-          };
-
     keyboardButton.style.cssText = `
-        width: ${buttonSize.width};
-        height: ${buttonSize.height};
-        background: ${buttonColors.background};
-        color: ${buttonColors.text};
-        border: 2px solid ${buttonColors.border};
+        width: ${config.buttonSize}px;
+        height: ${config.buttonSize}px;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        border: 2px solid #ff66cc;
         border-radius: 5px;
         font-size: 24px;
         cursor: pointer;
@@ -1791,8 +1295,8 @@
         isKeyboardActive = false;
 
         // Visual feedback
-        keyboardButton.style.background = buttonColors.background;
-        keyboardButton.style.borderColor = buttonColors.border;
+        keyboardButton.style.background = "rgba(0, 0, 0, 0.8)";
+        keyboardButton.style.borderColor = "#ff66cc";
         keyboardButton.style.boxShadow = "none";
         keyboardButton.style.transform = "scale(1)";
 
@@ -2050,36 +1554,18 @@
     logDebug("Keyboard button created with invisible input field");
     return keyboardButton;
   }
-
   // ================ UPDATED CALIBRATION BUTTON ================
 
   function createCalibrationButton(wrapper) {
     const calButton = document.createElement("button");
     calButton.innerHTML = "⚙️";
     calButton.title = "Calibrate Controls";
-
-    // Apply layout config if available
-    const layoutConfig = config.layoutConfig;
-    const buttonSize =
-      layoutConfig && layoutConfig.sizes && layoutConfig.sizes.calibrationButton
-        ? layoutConfig.sizes.calibrationButton
-        : { width: "60px", height: "60px" };
-
-    const buttonColors =
-      layoutConfig && layoutConfig.colors && layoutConfig.colors.buttons
-        ? layoutConfig.colors.buttons.calibrationButton
-        : {
-            background: "rgba(0, 0, 0, 0.8)",
-            border: "#ffaa00",
-            text: "#ffffff",
-          };
-
     calButton.style.cssText = `
-        width: ${buttonSize.width};
-        height: ${buttonSize.height};
-        background: ${buttonColors.background};
-        color: ${buttonColors.text};
-        border: 2px solid ${buttonColors.border};
+        width: ${config.buttonSize}px;
+        height: ${config.buttonSize}px;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        border: 2px solid #ffaa00;
         border-radius: 5px;
         font-size: 20px;
         cursor: pointer;
@@ -2107,31 +1593,10 @@
     const container = document.createElement("div");
     container.className = "shoulder-buttons-left";
 
-    // Apply layout config if available
-    const layoutConfig = config.layoutConfig;
-    const layout =
-      layoutConfig && layoutConfig.layout
-        ? layoutConfig.layout.positions.leftShoulder
-        : null;
-
-    const horizontalOffset = layout ? layout.horizontalOffset : "20px";
-    const verticalOffset = layout ? layout.verticalOffset : "-60px";
-    const buttonSpacing = layout ? layout.buttonSpacing : "10px";
-    const buttonSize = layout ? layout.buttonSize : "55px";
-
-    const buttonColors =
-      layoutConfig && layoutConfig.colors && layoutConfig.colors.buttons
-        ? layoutConfig.colors.buttons.shoulderButtons
-        : {
-            L1: "#ff6b6b",
-            L2: "#ff8e53",
-            background: "rgba(0, 0, 0, 0.7)",
-          };
-
     container.style.cssText = `
         position: absolute;
-        left: ${horizontalOffset};
-        top: calc(50% ${verticalOffset});
+        left: 20px;
+        top: 50%;
         width: 60px;
         height: 120px;
         pointer-events: auto;
@@ -2139,7 +1604,7 @@
         touch-action: none;
         display: flex;
         flex-direction: column;
-        gap: ${buttonSpacing};
+        gap: 10px;
         align-items: center;
     `;
 
@@ -2148,15 +1613,15 @@
         id: "L1",
         label: "L1",
         key: "BUTTON_LB",
-        color: buttonColors.L1,
-        size: buttonSize,
+        color: "#ff6b6b",
+        size: "55px",
       },
       {
         id: "L2",
         label: "L2",
         key: "BUTTON_LT",
-        color: buttonColors.L2,
-        size: buttonSize,
+        color: "#ff8e53",
+        size: "55px",
       },
     ];
 
@@ -2175,7 +1640,7 @@
       button.style.cssText = `
             width: ${btn.size};
             height: ${btn.size};
-            background: ${buttonColors.background};
+            background: rgba(0, 0, 0, ${config.buttonOpacity});
             border: 3px solid ${btn.color};
             border-radius: 50%;
             display: flex;
@@ -2250,7 +1715,7 @@
           buttonStates[btn.key].pressed = false;
 
           // Visual feedback
-          currentButton.style.background = buttonColors.background;
+          currentButton.style.background = `rgba(0, 0, 0, ${config.buttonOpacity})`;
           currentButton.style.color = "white";
           currentButton.style.boxShadow = "0 4px 8px rgba(0,0,0,0.3)";
           currentButton.style.transform = "scale(1) translateY(0)";
@@ -2365,7 +1830,6 @@
         key: b.key,
         mapping: currentProfile.mappings[b.key],
         position: "center-left",
-        layout: layout,
       })),
     });
 
@@ -2376,31 +1840,10 @@
     const container = document.createElement("div");
     container.className = "shoulder-buttons-right";
 
-    // Apply layout config if available
-    const layoutConfig = config.layoutConfig;
-    const layout =
-      layoutConfig && layoutConfig.layout
-        ? layoutConfig.layout.positions.rightShoulder
-        : null;
-
-    const horizontalOffset = layout ? layout.horizontalOffset : "20px";
-    const verticalOffset = layout ? layout.verticalOffset : "-60px";
-    const buttonSpacing = layout ? layout.buttonSpacing : "10px";
-    const buttonSize = layout ? layout.buttonSize : "55px";
-
-    const buttonColors =
-      layoutConfig && layoutConfig.colors && layoutConfig.colors.buttons
-        ? layoutConfig.colors.buttons.shoulderButtons
-        : {
-            R1: "#6b9fff",
-            R2: "#53b8ff",
-            background: "rgba(0, 0, 0, 0.7)",
-          };
-
     container.style.cssText = `
         position: absolute;
-        right: ${horizontalOffset};
-        top: calc(50% ${verticalOffset});
+        right: 20px;
+        top: 50%;
         width: 60px;
         height: 120px;
         pointer-events: auto;
@@ -2408,7 +1851,7 @@
         touch-action: none;
         display: flex;
         flex-direction: column;
-        gap: ${buttonSpacing};
+        gap: 10px;
         align-items: center;
     `;
 
@@ -2417,15 +1860,15 @@
         id: "R1",
         label: "R1",
         key: "BUTTON_RB",
-        color: buttonColors.R1,
-        size: buttonSize,
+        color: "#6b9fff",
+        size: "55px",
       },
       {
         id: "R2",
         label: "R2",
         key: "BUTTON_RT",
-        color: buttonColors.R2,
-        size: buttonSize,
+        color: "#53b8ff",
+        size: "55px",
       },
     ];
 
@@ -2444,7 +1887,7 @@
       button.style.cssText = `
             width: ${btn.size};
             height: ${btn.size};
-            background: ${buttonColors.background};
+            background: rgba(0, 0, 0, ${config.buttonOpacity});
             border: 3px solid ${btn.color};
             border-radius: 50%;
             display: flex;
@@ -2519,7 +1962,7 @@
           buttonStates[btn.key].pressed = false;
 
           // Visual feedback
-          currentButton.style.background = buttonColors.background;
+          currentButton.style.background = `rgba(0, 0, 0, ${config.buttonOpacity})`;
           currentButton.style.color = "white";
           currentButton.style.boxShadow = "0 4px 8px rgba(0,0,0,0.3)";
           currentButton.style.transform = "scale(1) translateY(0)";
@@ -2634,7 +2077,6 @@
         key: b.key,
         mapping: currentProfile.mappings[b.key],
         position: "center-right",
-        layout: layout,
       })),
     });
 
@@ -2657,52 +2099,130 @@
             touch-action: none;
             -webkit-user-select: none;
             user-select: none;
-            background-color: transparent;
+            background-color: green;
+        `;
+
+    // Create button cluster
+    const buttonCluster = createButtonCluster();
+    buttonCluster.style.cssText = `
+        position: absolute;
+        right: 30px;
+        top: 30px;
+        width: 200px;
+        height: 200px;
+        pointer-events: auto;
+        z-index: ${zIndex + 1};
+    `;
+
+    // Create system buttons
+    const systemButtons = createSystemButtons();
+    systemButtons.style.cssText = `
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            pointer-events: auto;
+            z-index: ${zIndex + 1};
+        `;
+
+    // Create D-pad
+    const dpad = createDpadTouch();
+    dpad.style.cssText = `
+          position: absolute;
+          left: 30px;
+          top: 30px;
+          width: 200px;
+          height: 200px;
+          pointer-events: auto;
+          z-index: ${zIndex + 1};
+        `;
+
+    // ================ ADD SHOULDER BUTTONS HERE ================
+    // Create left shoulder buttons (L1/L2)
+    const leftShoulderButtons = createLeftShoulderButtons();
+    leftShoulderButtons.style.cssText = `
+          position: absolute;
+          left: 20px;
+          top: calc(50% - 60px);
+          width: 60px;
+          height: 120px;
+          pointer-events: auto;
+          z-index: ${zIndex + 1};
+          touch-action: none;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          align-items: center;
+        `;
+
+    // Create right shoulder buttons (R1/R2)
+    const rightShoulderButtons = createRightShoulderButtons();
+    rightShoulderButtons.style.cssText = `
+          position: absolute;
+          right: 20px;
+          top: calc(50% - 60px);
+          width: 60px;
+          height: 120px;
+          pointer-events: auto;
+          z-index: ${zIndex + 1};
+          touch-action: none;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          align-items: center;
         `;
 
     // Create left joystick area
     const leftJoystick = createJoystick("left", "move");
-    overlay.appendChild(leftJoystick);
+    leftJoystick.style.cssText = `
+            position: absolute;
+            left: 30px;
+            bottom: 30px;
+            width: ${config.joystickSize};
+            height: ${config.joystickSize};
+            pointer-events: auto;
+            z-index: ${zIndex + 1};
+        `;
 
     // Create right joystick area
     const rightJoystick = createJoystick("right", "look");
+    rightJoystick.style.cssText = `
+            position: absolute;
+            right: 30px;
+            bottom: 30px;
+            width: ${config.joystickSize};
+            height: ${config.joystickSize};
+            pointer-events: auto;
+            z-index: ${zIndex + 1};
+        `;
+
+    // ==========================================================
+
+    // append on screen buttons
+    overlay.appendChild(leftJoystick);
     overlay.appendChild(rightJoystick);
-
-    // Create button cluster
-    const buttonCluster = createButtonCluster();
     overlay.appendChild(buttonCluster);
-
-    // Create D-pad
-    const dpad = createDpadTouch();
     overlay.appendChild(dpad);
-
-    // Create system buttons
-    const systemButtons = createSystemButtons();
     overlay.appendChild(systemButtons);
 
-    // Create left shoulder buttons (L1/L2)
-    if (config.includeShoulderButtons) {
-      const leftShoulderButtons = createLeftShoulderButtons();
-      overlay.appendChild(leftShoulderButtons);
-
-      // Create right shoulder buttons (R1/R2)
-      const rightShoulderButtons = createRightShoulderButtons();
-      overlay.appendChild(rightShoulderButtons);
-    }
+    // Add shoulder buttons to overlay
+    overlay.appendChild(leftShoulderButtons);
+    overlay.appendChild(rightShoulderButtons);
 
     document.body.appendChild(overlay);
 
-    // Apply layout configuration
-    updateControlPositions();
+    document.body.appendChild(overlay);
 
     // Create mobile keyboard input if needed
     if (config.enableMobileKeyboardSupport) {
       createMobileTextInput();
     }
 
-    logDebug("Touch controls created with layout config", {
+    logDebug("Touch controls created", {
       joystickSize: config.joystickSize,
-      layout: config.layoutConfig.layout,
+      buttonClusterPosition: config.buttonClusterPosition,
       mobileKeyboardSupport: config.enableMobileKeyboardSupport,
     });
 
@@ -2722,19 +2242,6 @@
     joystick.className = `joystick joystick-${side}`;
     joystick.dataset.type = type;
     joystick.dataset.side = side;
-
-    // Apply layout config
-    const layoutConfig = config.layoutConfig;
-    const joystickColors =
-      layoutConfig && layoutConfig.colors && layoutConfig.colors.joysticks
-        ? layoutConfig.colors.joysticks
-        : {
-            background: "rgba(0, 0, 0, 0.7)",
-            border: "rgba(255, 255, 255, 0.5)",
-            nub: "rgba(255, 255, 255, 0.9)",
-            label: "#ffffff",
-            arrows: "rgba(255, 255, 255, 0.3)",
-          };
 
     // Use SVG like original project
     joystick.innerHTML = `
@@ -2756,10 +2263,10 @@
                 width: 100%;
                 height: 100%;
                 border-radius: 50%;
-                background: ${joystickColors.background};
+                background: rgba(0, 0, 0, ${config.buttonOpacity});
                 border: ${
                   config.showJoystickOutline
-                    ? "2px solid " + joystickColors.border
+                    ? "2px solid " + config.joystickOutlineColor
                     : "none"
                 };
                 cursor: move;
@@ -2775,7 +2282,7 @@
                 position: absolute;
                 width: 40%;
                 height: 40%;
-                background: ${joystickColors.nub};
+                background: ${config.joystickNubColor};
                 border-radius: 50%;
                 top: 50%;
                 left: 50%;
@@ -2789,7 +2296,7 @@
                 top: -25px;
                 left: 0;
                 right: 0;
-                color: ${joystickColors.label};
+                color: white;
                 font-size: 12px;
                 text-shadow: 1px 1px 2px black;
                 white-space: nowrap;
@@ -2811,7 +2318,7 @@
                 position: absolute;
                 width: 12%;
                 height: 12%;
-                background: ${joystickColors.arrows};
+                background: currentColor;
                 clip-path: polygon(100% 50%, 0 0, 0 100%);
             }
             .joystick-arrow:nth-child(1) { top: 5%; left: 50%; transform: translateX(-50%) rotate(90deg); } /* Up */
@@ -3152,8 +2659,7 @@
                 // Visual feedback
                 joystickArea.style.backgroundColor = "rgba(255, 200, 0, 0.7)";
                 setTimeout(() => {
-                  joystickArea.style.backgroundColor =
-                    joystickColors.background;
+                  joystickArea.style.backgroundColor = `rgba(0, 0, 0, ${config.buttonOpacity})`;
                 }, 200);
 
                 // Send click event
@@ -3292,7 +2798,7 @@
         if (mapping) {
           joystickArea.style.backgroundColor = "rgba(255, 200, 0, 0.7)";
           setTimeout(() => {
-            joystickArea.style.backgroundColor = joystickColors.background;
+            joystickArea.style.backgroundColor = `rgba(0, 0, 0, ${config.buttonOpacity})`;
           }, 200);
 
           sendKeyEvent(mapping, "down");
@@ -3361,29 +2867,12 @@
     const container = document.createElement("div");
     container.className = "face-buttons";
 
-    // Apply layout config if available
-    const layoutConfig = config.layoutConfig;
-    const layout =
-      layoutConfig && layoutConfig.layout
-        ? layoutConfig.layout.positions.faceButtons
-        : null;
-
-    const horizontalOffset = layout ? layout.horizontalOffset : "30px";
-    const verticalOffset = layout ? layout.verticalOffset : "30px";
-    const width = layout ? layout.width : "150px";
-    const height = layout ? layout.height : "150px";
-
-    const buttonColors =
-      layoutConfig && layoutConfig.colors && layoutConfig.colors.buttons
-        ? layoutConfig.colors.buttons.faceButtons
-        : { cluster: "#333333", buttons: "#666666", active: "#ffffff" };
-
     container.style.cssText = `
         position: absolute;
-        right: ${horizontalOffset};
-        top: ${verticalOffset};
-        width: ${width};
-        height: ${height};
+        right: 30px;
+        bottom: calc(${config.joystickSize} + 60px);
+        width: 150px;
+        height: 150px;
         pointer-events: auto;
         z-index: ${config.zIndex - 1};
         touch-action: none;
@@ -3483,7 +2972,7 @@
     clusterCircle.setAttribute("cx", "5");
     clusterCircle.setAttribute("cy", "5");
     clusterCircle.setAttribute("r", "5");
-    clusterCircle.setAttribute("fill", buttonColors.cluster);
+    clusterCircle.setAttribute("fill", "currentColor");
 
     // Buttons group
     const buttonsGroup = document.createElementNS(svgNS, "g");
@@ -3496,7 +2985,7 @@
       circle.setAttribute("cy", "5");
       circle.setAttribute("r", "5");
       circle.setAttribute("mask", `url(#${maskId})`);
-      circle.setAttribute("fill", buttonColors.buttons);
+      circle.setAttribute("fill", "currentColor");
       circle.dataset.index = index;
       circle.dataset.key = `BUTTON_${maskId}`;
       circle.dataset.button = maskId;
@@ -3510,7 +2999,7 @@
     container.appendChild(svgWrapper);
 
     // Set color for the entire SVG
-    svg.style.color = buttonColors.buttons;
+    svg.style.color = "#ffffff";
 
     // State tracking
     const buttonStates = {
@@ -3548,10 +3037,8 @@
       // Update visual state
       if (state.pressed) {
         state.element.classList.add("pressed");
-        state.element.style.fill = buttonColors.active;
       } else {
         state.element.classList.remove("pressed");
-        state.element.style.fill = buttonColors.buttons;
       }
 
       // Trigger key events
@@ -3597,6 +3084,19 @@
           button: button,
           index: index,
         });
+
+        logDebug(`Button ${buttonNames[index]} ACTUAL position:`, {
+          name: buttonNames[index],
+          centerX: centerX.toFixed(1),
+          centerY: centerY.toFixed(1),
+          radius: radius.toFixed(1),
+          bounds: {
+            left: rect.left.toFixed(1),
+            top: rect.top.toFixed(1),
+            right: rect.right.toFixed(1),
+            bottom: rect.bottom.toFixed(1),
+          },
+        });
       });
 
       return positions;
@@ -3630,6 +3130,13 @@
           activeTouches.set(identifier, buttonIndex);
         }
         updateButton(buttonIndex, 1);
+
+        logDebug(`Pointer START on button ${buttonNames[buttonIndex]}`, {
+          button: buttonNames[buttonIndex],
+          screenX: screenX.toFixed(1),
+          screenY: screenY.toFixed(1),
+          method: identifier !== null ? "touch" : "mouse",
+        });
       }
     }
 
@@ -3718,15 +3225,20 @@
       handlePointerEnd();
     });
 
-    logDebug("Face buttons created", {
-      layout: layout,
-      colors: buttonColors,
+    // Clean up debug overlay when container is removed
+    container.cleanup = function () {
+      if (debugOverlay && debugOverlay.parentNode) {
+        debugOverlay.parentNode.removeChild(debugOverlay);
+      }
+    };
+
+    logDebug("Face buttons created with DEBUG overlay", {
+      note: "Red/Green/Blue/Yellow circles show ACTUAL touch areas",
       buttonNames: buttonNames,
     });
 
     return container;
   }
-
   function createButtonCluster() {
     // Just return face buttons positioned above right thumbstick
     return createFaceButtons();
@@ -3736,60 +3248,9 @@
     const container = document.createElement("div");
     container.className = "system-buttons";
 
-    // Apply layout config if available
-    const layoutConfig = config.layoutConfig;
-    const layout =
-      layoutConfig && layoutConfig.layout
-        ? layoutConfig.layout.positions.systemButtons
-        : null;
-
-    const horizontalAlign = layout ? layout.horizontalAlign : "center";
-    const verticalOffset = layout ? layout.verticalOffset : "80px";
-    const buttonSpacing = layout ? layout.buttonSpacing : "20px";
-
-    const buttonColors =
-      layoutConfig && layoutConfig.colors && layoutConfig.colors.buttons
-        ? layoutConfig.colors.buttons.systemButtons
-        : {
-            background: "rgba(0, 0, 0, 0.7)",
-            border: "#666666",
-            text: "#ffffff",
-          };
-
-    const buttonSize =
-      layoutConfig && layoutConfig.sizes && layoutConfig.sizes.systemButtons
-        ? layoutConfig.sizes.systemButtons
-        : { width: "80px", height: "40px" };
-
-    container.style.cssText = `
-        position: absolute;
-        ${horizontalAlign === "left" ? "left: 20px;" : ""}
-        ${
-          horizontalAlign === "center"
-            ? "left: 50%; transform: translateX(-50%);"
-            : ""
-        }
-        ${horizontalAlign === "right" ? "right: 20px;" : ""}
-        bottom: ${verticalOffset};
-        display: flex;
-        gap: ${buttonSpacing};
-        pointer-events: auto;
-        z-index: ${config.zIndex + 1};
-    `;
-
     const buttons = [
-      {
-        id: "SELECT",
-        label: "Select",
-        key: "BUTTON_SELECT",
-        color: buttonColors.border,
-      },
-      {
-        id: "START",
-        label: "Start",
-        key: "BUTTON_START",
-        color: buttonColors.border,
-      },
+      { id: "SELECT", label: "Select", key: "BUTTON_SELECT", color: "#666" },
+      { id: "START", label: "Start", key: "BUTTON_START", color: "#666" },
     ];
 
     // State tracking for buttons
@@ -3805,15 +3266,15 @@
       button.dataset.id = btn.id;
 
       button.style.cssText = `
-            width: ${buttonSize.width};
-            height: ${buttonSize.height};
-            background: ${buttonColors.background};
+            width: 80px;
+            height: 40px;
+            background: rgba(0, 0, 0, ${config.buttonOpacity});
             border: 2px solid ${btn.color};
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: ${buttonColors.text};
+            color: white;
             font-size: 14px;
             cursor: pointer;
             touch-action: none;
@@ -3862,8 +3323,8 @@
           buttonStates[btn.key].pressed = false;
 
           // Visual feedback
-          currentButton.style.background = buttonColors.background;
-          currentButton.style.color = buttonColors.text;
+          currentButton.style.background = `rgba(0, 0, 0, ${config.buttonOpacity})`;
+          currentButton.style.color = "white";
           currentButton.style.boxShadow = "0 2px 5px rgba(0,0,0,0.3)";
           currentButton.style.transform = "scale(1)";
 
@@ -3974,7 +3435,6 @@
         label: b.label,
         key: b.key,
         mapping: currentProfile.mappings[b.key],
-        layout: layout,
       })),
     });
 
@@ -3987,29 +3447,12 @@
     const container = document.createElement("div");
     container.className = "dpad-container";
 
-    // Apply layout config if available
-    const layoutConfig = config.layoutConfig;
-    const layout =
-      layoutConfig && layoutConfig.layout
-        ? layoutConfig.layout.positions.dpad
-        : null;
-
-    const horizontalOffset = layout ? layout.horizontalOffset : "30px";
-    const verticalOffset = layout ? layout.verticalOffset : "30px";
-    const width = layout ? layout.width : "120px";
-    const height = layout ? layout.height : "120px";
-
-    const buttonColors =
-      layoutConfig && layoutConfig.colors && layoutConfig.colors.buttons
-        ? layoutConfig.colors.buttons.dpad
-        : { cluster: "#333333", buttons: "#666666", active: "#ffffff" };
-
     container.style.cssText = `
         position: absolute;
-        left: ${horizontalOffset};
-        top: ${verticalOffset};
-        width: ${width};
-        height: ${height};
+        left: 30px;
+        top: 30px;
+        width: ${config.dpadSize || "120px"};
+        height: ${config.dpadSize || "120px"};
         pointer-events: auto;
         z-index: ${config.zIndex - 1};
         touch-action: none;
@@ -4092,11 +3535,11 @@
     style.textContent = `
         #dpad-cluster { 
             opacity: 1;
-            fill: ${buttonColors.cluster};
+            fill: #333333;
         }
         #dpad-buttons { 
             opacity: 1;
-            fill: ${buttonColors.buttons};
+            fill: lightGray;
         }
         #dpad-buttons > * {
             transform-origin: 5px 5px;
@@ -4108,7 +3551,6 @@
         #dpad-buttons > :nth-child(4) { transform: rotate(0deg) translate(2.7px) rotate(0deg) scale(0.33); } /* RIGHT */
         .dpad-pressed { 
             filter: url(#dpad-invert);
-            fill: ${buttonColors.active} !important;
         }
         circle { 
             pointer-events: visible; 
@@ -4127,7 +3569,7 @@
     clusterCircle.setAttribute("cx", "5");
     clusterCircle.setAttribute("cy", "5");
     clusterCircle.setAttribute("r", "5");
-    clusterCircle.setAttribute("fill", buttonColors.cluster);
+    clusterCircle.setAttribute("fill", "white");
 
     // Buttons group
     const buttonsGroup = document.createElementNS(svgNS, "g");
@@ -4140,7 +3582,7 @@
       circle.setAttribute("cy", "5");
       circle.setAttribute("r", "5");
       circle.setAttribute("mask", `url(#dpad-${maskId})`);
-      circle.setAttribute("fill", buttonColors.buttons);
+      circle.setAttribute("fill", "#666666");
       circle.dataset.index = index;
       circle.dataset.key = `BUTTON_DPAD_${maskId}`;
       circle.dataset.direction = maskId.toLowerCase();
@@ -4238,6 +3680,19 @@
           index: index,
           direction: directionNames[index],
         });
+
+        logDebug(`D-Pad ${directionNames[index]} ACTUAL position:`, {
+          direction: directionNames[index],
+          centerX: centerX.toFixed(1),
+          centerY: centerY.toFixed(1),
+          radius: radius.toFixed(1),
+          bounds: {
+            left: rect.left.toFixed(1),
+            top: rect.top.toFixed(1),
+            right: rect.right.toFixed(1),
+            bottom: rect.bottom.toFixed(1),
+          },
+        });
       });
 
       return positions;
@@ -4271,6 +3726,13 @@
           activeTouches.set(identifier, buttonIndex);
         }
         updateButton(buttonIndex, 1);
+
+        logDebug(`D-Pad START on ${directionNames[buttonIndex]}`, {
+          direction: directionNames[buttonIndex],
+          screenX: screenX.toFixed(1),
+          screenY: screenY.toFixed(1),
+          method: identifier !== null ? "touch" : "mouse",
+        });
       }
     }
 
@@ -4360,8 +3822,9 @@
     });
 
     logDebug("D-Pad touch controls created (circle style)", {
-      layout: layout,
-      colors: buttonColors,
+      size: config.dpadSize || "120px",
+      position: "top-left",
+      style: "circle-masked",
       mappings: {
         up: currentProfile.mappings.BUTTON_DPAD_UP,
         down: currentProfile.mappings.BUTTON_DPAD_DOWN,
@@ -4403,7 +3866,6 @@
 
       logDebug("Virtual Gamepad ENABLED", {
         profile: config.defaultProfile,
-        layout: config.layoutConfig.layout.type,
         joysticks: 2,
         buttons: 10,
         mobileKeyboard: config.enableMobileKeyboardSupport,
@@ -5071,7 +4533,8 @@
   }
 
   function init() {
-    logDebug("Initializing Virtual Gamepad with Layout Configuration...", {
+    //
+    logDebug("Initializing Virtual Gamepad...", {
       version: "1.0.0",
       debugMode: config.debugMode,
       timestamp: new Date().toISOString(),
@@ -5089,23 +4552,12 @@
           console.warn("Failed to load saved config:", e);
         }
       }
-
-      // Load layout configuration
-      const savedLayout = localStorage.getItem("virtualgamepad_layout");
-      if (savedLayout) {
-        try {
-          const parsedLayout = JSON.parse(savedLayout);
-          config.layoutConfig = { ...config.layoutConfig, ...parsedLayout };
-          logDebug("Loaded saved layout configuration", parsedLayout);
-        } catch (e) {
-          console.warn("Failed to load saved layout:", e);
-        }
-      }
     }
 
     // Load current profile
     switchProfile(config.defaultProfile);
 
+    // Create enable button
     // Create top buttons wrapper
     const topButtonsWrapper = createTopButtonsWrapper();
 
@@ -5114,12 +4566,32 @@
     if (config.showCalibrationButton) {
       createCalibrationButton(topButtonsWrapper);
     }
+    //CREATE QR BUTTON
     createQrButton(topButtonsWrapper);
+    // Auto-enable on mobile
+    if (config.autoEnableOnTouch && "ontouchstart" in window) {
+      const isMobile =
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        );
+      if (isMobile) {
+        setTimeout(() => {
+          if (!isEnabled) {
+            logDebug("Auto-enabling on mobile device");
+            toggleVirtualGamepad();
+          }
+        }, 2000);
+      }
+    }
+
+    // Add Keyboard button
     createKeyboardButton(topButtonsWrapper);
 
     // Create touch-to-mouse trackpad (but don't enable it yet)
     window.touchTrackpad = createTouchToMouseTrackpad(config.zIndex);
 
+    // Add Trackpad
+    // createTouchTrackPad();
     // Add Touch controls
     createTouchControls(config.zIndex + 1);
 
@@ -5129,16 +4601,12 @@
         logDebug("Auto-enabling controls on initialization");
         toggleVirtualGamepad();
       }
-    }, 100);
+    }, 100); // Small delay to ensure DOM is ready
 
     // Save config on page unload
     window.addEventListener("beforeunload", () => {
       if (config.saveToLocalStorage) {
         localStorage.setItem("virtualgamepad_config", JSON.stringify(config));
-        localStorage.setItem(
-          "virtualgamepad_layout",
-          JSON.stringify(config.layoutConfig)
-        );
         logDebug("Configuration saved to localStorage");
       }
     });
@@ -5156,7 +4624,6 @@
 
     logDebug("Virtual Gamepad initialized successfully!", {
       currentProfile: config.defaultProfile,
-      layoutConfig: config.layoutConfig.layout.type,
       buttonCount: Object.keys(currentProfile.mappings).length,
       ready: true,
     });
@@ -5169,8 +4636,7 @@
     );
   }
 
-  // ================ EXPORT PUBLIC API ================
-
+  // Export public API
   window.VirtualGamepad = {
     enable: () => {
       if (!isEnabled) toggleVirtualGamepad();
@@ -5217,306 +4683,12 @@
       console.log("=== VIRTUAL GAMEPAD STATUS ===");
       console.log("Enabled:", isEnabled);
       console.log("Profile:", config.defaultProfile);
-      console.log("Layout:", config.layoutConfig.layout.type);
       console.log("Active Keys:", Array.from(pressedKeys));
       console.log("Mouse Buttons:", Array.from(mouseButtons));
       console.log("Configuration:", config);
       console.log("Current Mappings:", currentProfile.mappings);
       console.log("==============================");
     },
-
-    // NEW: Layout Configuration Management
-    getLayoutConfig: () => ({ ...config.layoutConfig }),
-
-    setLayoutConfig: (layoutConfig) => {
-      config.layoutConfig = { ...config.layoutConfig, ...layoutConfig };
-      if (overlay) {
-        overlay.remove();
-        overlay = null;
-        if (isEnabled) {
-          createTouchControls(config.zIndex + 1);
-        }
-      }
-      logDebug("Layout configuration updated and applied", layoutConfig);
-    },
-
-    saveLayoutConfig: function (configName = "custom") {
-      const layoutConfig = {
-        version: "1.0.0",
-        name: configName,
-        timestamp: new Date().toISOString(),
-        layout: config.layoutConfig.layout,
-        sizes: config.layoutConfig.sizes,
-        colors: config.layoutConfig.colors,
-        behavior: config.layoutConfig.behavior,
-      };
-
-      if (config.saveToLocalStorage) {
-        localStorage.setItem(
-          `virtualgamepad_layout_${configName}`,
-          JSON.stringify(layoutConfig, null, 2)
-        );
-      }
-
-      logDebug(`Layout config saved: ${configName}`, layoutConfig);
-      return layoutConfig;
-    },
-
-    loadLayoutConfig: function (configName = "custom") {
-      if (config.saveToLocalStorage) {
-        const saved = localStorage.getItem(
-          `virtualgamepad_layout_${configName}`
-        );
-        if (saved) {
-          try {
-            const layoutConfig = JSON.parse(saved);
-            this.setLayoutConfig(layoutConfig);
-            logDebug(`Layout config loaded: ${configName}`, layoutConfig);
-            return layoutConfig;
-          } catch (e) {
-            console.error("Failed to load layout config:", e);
-            return null;
-          }
-        }
-      }
-      return null;
-    },
-
-    exportLayoutConfig: function () {
-      const layoutConfig = this.saveLayoutConfig("export");
-      const dataStr = JSON.stringify(layoutConfig, null, 2);
-      const dataUri =
-        "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
-
-      const exportFileDefaultName = `gamepad-layout-${
-        new Date().toISOString().split("T")[0]
-      }.json`;
-
-      const linkElement = document.createElement("a");
-      linkElement.setAttribute("href", dataUri);
-      linkElement.setAttribute("download", exportFileDefaultName);
-      linkElement.click();
-
-      logDebug("Layout config exported");
-    },
-
-    importLayoutConfig: function (jsonConfig) {
-      try {
-        const layoutConfig =
-          typeof jsonConfig === "string" ? JSON.parse(jsonConfig) : jsonConfig;
-        this.setLayoutConfig(layoutConfig);
-        logDebug("Layout config imported", layoutConfig);
-        return true;
-      } catch (e) {
-        console.error("Failed to import layout config:", e);
-        return false;
-      }
-    },
-
-    getCurrentLayout: function () {
-      const elements = {
-        leftJoystick: document.querySelector(".joystick-left"),
-        rightJoystick: document.querySelector(".joystick-right"),
-        faceButtons: document.querySelector(".face-buttons"),
-        dpad: document.querySelector(".dpad-container"),
-        systemButtons: document.querySelector(".system-buttons"),
-        leftShoulder: document.querySelector(".shoulder-buttons-left"),
-        rightShoulder: document.querySelector(".shoulder-buttons-right"),
-      };
-
-      const layout = {};
-
-      for (const [key, element] of Object.entries(elements)) {
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          const style = window.getComputedStyle(element);
-          layout[key] = {
-            top: style.top,
-            left: style.left,
-            right: style.right,
-            bottom: style.bottom,
-            width: style.width,
-            height: style.height,
-            position: style.position,
-            screenRect: {
-              top: rect.top,
-              left: rect.left,
-              width: rect.width,
-              height: rect.height,
-            },
-          };
-        }
-      }
-
-      return layout;
-    },
-
-    applyPreset: function (presetName) {
-      const presets = {
-        default: {
-          layout: {
-            positions: {
-              leftJoystick: {
-                horizontalOffset: "30px",
-                verticalOffset: "30px",
-                width: "150px",
-              },
-              rightJoystick: {
-                horizontalOffset: "30px",
-                verticalOffset: "30px",
-                width: "150px",
-              },
-              faceButtons: {
-                horizontalOffset: "30px",
-                verticalOffset: "30px",
-                width: "150px",
-              },
-              dpad: {
-                horizontalOffset: "30px",
-                verticalOffset: "30px",
-                width: "120px",
-              },
-            },
-          },
-          sizes: {
-            buttonSize: "60px",
-            joystickSize: "150px",
-          },
-        },
-        compact: {
-          layout: {
-            positions: {
-              leftJoystick: {
-                horizontalOffset: "10px",
-                verticalOffset: "10px",
-                width: "120px",
-              },
-              rightJoystick: {
-                horizontalOffset: "10px",
-                verticalOffset: "10px",
-                width: "120px",
-              },
-              faceButtons: {
-                horizontalOffset: "10px",
-                verticalOffset: "10px",
-                width: "120px",
-              },
-              dpad: {
-                horizontalOffset: "10px",
-                verticalOffset: "10px",
-                width: "100px",
-              },
-            },
-          },
-          sizes: {
-            buttonSize: "50px",
-            joystickSize: "120px",
-          },
-        },
-        "left-handed": {
-          layout: {
-            positions: {
-              leftJoystick: {
-                side: "right",
-                horizontalOffset: "30px",
-                verticalOffset: "30px",
-                width: "150px",
-              },
-              rightJoystick: {
-                side: "left",
-                horizontalOffset: "30px",
-                verticalOffset: "30px",
-                width: "150px",
-              },
-              faceButtons: {
-                side: "left",
-                horizontalOffset: "30px",
-                verticalOffset: "30px",
-                width: "150px",
-              },
-              dpad: {
-                side: "right",
-                horizontalOffset: "30px",
-                verticalOffset: "30px",
-                width: "120px",
-              },
-            },
-          },
-        },
-      };
-
-      if (presets[presetName]) {
-        this.setLayoutConfig(presets[presetName]);
-        logDebug(`Preset applied: ${presetName}`);
-        return true;
-      }
-      return false;
-    },
-
-    resetLayout: function () {
-      config.layoutConfig = { ...DEFAULT_CONFIG.layoutConfig };
-      if (overlay) {
-        overlay.remove();
-        overlay = null;
-        if (isEnabled) {
-          createTouchControls(config.zIndex + 1);
-        }
-      }
-      logDebug("Layout reset to defaults");
-    },
   };
-
   //////////////////VIRTUALGAMEPAD.JS////////////////////////
 })();
-
-// Key Changes Made:
-//     Integrated Layout Configuration: Added layoutConfig object to the main config with sections for layout, sizes, colors, behavior, and visibility.
-//     Dynamic Styling: Modified all component creation functions to read from layoutConfig instead of hardcoded values.
-//     Layout Application Function: Added updateControlPositions() and applyLayoutStyles() functions to dynamically apply layout configurations.
-//     Config Management API: Extended the VirtualGamepad API with new methods:
-//         getLayoutConfig() / setLayoutConfig()
-//         saveLayoutConfig() / loadLayoutConfig()
-//         exportLayoutConfig() / importLayoutConfig()
-//         getCurrentLayout() - captures current DOM positions
-//         applyPreset() - applies predefined layouts
-//         resetLayout() - resets to defaults
-
-//     Preset Support: Added default presets (default, compact, left-handed) for quick layout switching.
-//     Persistent Storage: Layout configurations are saved to localStorage alongside other settings.
-//     Backward Compatibility: All existing functionality remains intact - the new system extends rather than replaces.
-
-// Usage Examples:
-
-// // Get current layout config
-// const layout = VirtualGamepad.getLayoutConfig();
-
-// // Modify and apply new layout
-// VirtualGamepad.setLayoutConfig({
-//   layout: {
-//     positions: {
-//       leftJoystick: { horizontalOffset: "40px", verticalOffset: "40px", width: "160px" },
-//       faceButtons: { horizontalOffset: "40px", verticalOffset: "40px", width: "160px" }
-//     }
-//   },
-//   colors: {
-//     joysticks: {
-//       border: "rgba(255, 0, 0, 0.5)",
-//       nub: "rgba(255, 255, 0, 0.9)"
-//     }
-//   }
-// });
-
-// // Apply a preset
-// VirtualGamepad.applyPreset("compact");
-
-// // Save custom layout
-// VirtualGamepad.saveLayoutConfig("my-layout");
-
-// // Export to JSON file
-// VirtualGamepad.exportLayoutConfig();
-
-// // Import from JSON
-// VirtualGamepad.importLayoutConfig(jsonConfig);
-
-// The modified code now provides full configuration management through JSON,
-// making it easy to customize, save, load, and share gamepad layouts.
