@@ -4,6 +4,134 @@
 (function () {
   ("use strict");
 
+  // ================ LOGGING FUNCTIONS ================
+
+  function logDebug(message, data = null) {
+    if (!config.debugMode) return;
+
+    const timestamp = new Date().toISOString().split("T")[1].split(".")[0];
+    const prefix = `🎮 [${timestamp}]`;
+
+    // Console logging
+    if (data) {
+      console.log(`${prefix} ${message}:`, data);
+    } else {
+      console.log(`${prefix} ${message}`);
+    }
+
+    // Create or get debug overlay
+    let debugOverlay = document.getElementById("virtualgamepad-debug-overlay");
+    if (!debugOverlay) {
+      debugOverlay = document.createElement("div");
+      debugOverlay.id = "virtualgamepad-debug-overlay";
+      debugOverlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 18px;
+            background: rgba(0, 0, 0, 0.9);
+            color: #00ff00;
+            padding: 0px;
+            font-size: 7px;
+            z-index: ${config.zIndex};
+            pointer-events: none;
+            white-space: nowrap;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+         `;
+      document.body.appendChild(debugOverlay);
+    }
+
+    // Create log entry
+    const logEntry = document.createElement("div");
+    logEntry.className = "debug-log-entry";
+    logEntry.style.cssText = `
+        padding: 4px 12px;
+        margin: 2px 0;
+        width: 100%;
+        box-sizing: border-box;
+    `;
+
+    // Format the message
+    let displayText = `[${timestamp}] ${message}`;
+    if (data) {
+      try {
+        if (typeof data === "object") {
+          // Try to create a compact string representation
+          const dataStr = JSON.stringify(data, null, 0)
+            .replace(/[{}"]/g, "")
+            .replace(/:/g, "=")
+            .replace(/,/g, " ");
+          displayText += `: ${dataStr}`;
+        } else {
+          displayText += `: ${data}`;
+        }
+      } catch (e) {
+        displayText += `: ${String(data)}`;
+      }
+    }
+
+    // Truncate if too long
+    if (displayText.length > 80) {
+      displayText = displayText.substring(0, 77) + "...";
+    }
+
+    logEntry.textContent = displayText;
+
+    // Add to overlay (newest on top)
+    debugOverlay.insertBefore(logEntry, debugOverlay.firstChild);
+
+    // Limit number of visible logs
+    const maxLogs = 5;
+    const allLogs = debugOverlay.querySelectorAll(".debug-log-entry");
+    if (allLogs.length > maxLogs) {
+      for (let i = maxLogs; i < allLogs.length; i++) {
+        allLogs[i].remove();
+      }
+    }
+
+    // Remove this log entry after 1 second
+    setTimeout(() => {
+      if (logEntry.parentNode === debugOverlay) {
+        // Fade out animation
+        logEntry.style.opacity = "0";
+        setTimeout(() => {
+          if (logEntry.parentNode === debugOverlay) {
+            logEntry.remove();
+
+            // Remove overlay if empty
+            if (debugOverlay.children.length === 0) {
+              debugOverlay.remove();
+            }
+          }
+        }, 300);
+      }
+    }, 1000);
+
+    // Add CSS for animations if not already present
+    if (!document.getElementById("debug-overlay-styles")) {
+      const style = document.createElement("style");
+      style.id = "debug-overlay-styles";
+      style.textContent = `
+            #virtualgamepad-debug-overlay::-webkit-scrollbar {
+                width: 4px;
+            }
+            #virtualgamepad-debug-overlay::-webkit-scrollbar-track {
+                background: rgba(0, 20, 0, 0.3);
+            }
+            #virtualgamepad-debug-overlay::-webkit-scrollbar-thumb {
+                background: #00aa00;
+                border-radius: 2px;
+            }
+        `;
+      document.head.appendChild(style);
+    }
+  }
+
   // Default configuration
   const DEFAULT_CONFIG = {
     zIndex: 99999999,
@@ -123,147 +251,6 @@
   let overlay = null;
   let calibrationDialog = null;
   let mobileTextInput = null; // NEW: Mobile keyboard support
-
-  // ================ LOGGING FUNCTIONS ================
-
-  function logDebug(message, data = null) {
-    if (!config.debugMode) return;
-
-    const timestamp = new Date().toISOString().split("T")[1].split(".")[0];
-    const prefix = `🎮 [${timestamp}]`;
-
-    // Console logging
-    if (data) {
-      console.log(`${prefix} ${message}:`, data);
-    } else {
-      console.log(`${prefix} ${message}`);
-    }
-
-    // Create or get debug overlay
-    let debugOverlay = document.getElementById("virtualgamepad-debug-overlay");
-    if (!debugOverlay) {
-      debugOverlay = document.createElement("div");
-      debugOverlay.id = "virtualgamepad-debug-overlay";
-      debugOverlay.style.cssText = `
-            position: fixed;
-            top: calc(50%);
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.9);
-            color: #00ff00;
-            padding: 8px 0;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-            font-size: 8px;
-            z-index: 99999999;
-            pointer-events: none;
-            white-space: nowrap;
-            border: 1px solid #00aa00;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
-            width: 80%;
-            max-height: 200px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-         `;
-      document.body.appendChild(debugOverlay);
-    }
-
-    // Create log entry
-    const logEntry = document.createElement("div");
-    logEntry.className = "debug-log-entry";
-    logEntry.style.cssText = `
-        padding: 4px 12px;
-        margin: 2px 0;
-        background: rgba(0, 20, 0, 0.5);
-        border-radius: 3px;
-        width: 100%;
-        box-sizing: border-box;
-        animation: fadeIn 0.2s ease;
-        border-left: 2px solid #00aa00;
-    `;
-
-    // Format the message
-    let displayText = `[${timestamp}] ${message}`;
-    if (data) {
-      try {
-        if (typeof data === "object") {
-          // Try to create a compact string representation
-          const dataStr = JSON.stringify(data, null, 0)
-            .replace(/[{}"]/g, "")
-            .replace(/:/g, "=")
-            .replace(/,/g, " ");
-          displayText += `: ${dataStr}`;
-        } else {
-          displayText += `: ${data}`;
-        }
-      } catch (e) {
-        displayText += `: ${String(data)}`;
-      }
-    }
-
-    // Truncate if too long
-    if (displayText.length > 80) {
-      displayText = displayText.substring(0, 77) + "...";
-    }
-
-    logEntry.textContent = displayText;
-
-    // Add to overlay (newest on top)
-    debugOverlay.insertBefore(logEntry, debugOverlay.firstChild);
-
-    // Limit number of visible logs
-    const maxLogs = 5;
-    const allLogs = debugOverlay.querySelectorAll(".debug-log-entry");
-    if (allLogs.length > maxLogs) {
-      for (let i = maxLogs; i < allLogs.length; i++) {
-        allLogs[i].remove();
-      }
-    }
-
-    // Remove this log entry after 1 second
-    setTimeout(() => {
-      if (logEntry.parentNode === debugOverlay) {
-        // Fade out animation
-        logEntry.style.opacity = "0";
-        logEntry.style.transition = "opacity 0.3s ease";
-        setTimeout(() => {
-          if (logEntry.parentNode === debugOverlay) {
-            logEntry.remove();
-
-            // Remove overlay if empty
-            if (debugOverlay.children.length === 0) {
-              debugOverlay.remove();
-            }
-          }
-        }, 300);
-      }
-    }, 1000);
-
-    // Add CSS for animations if not already present
-    if (!document.getElementById("debug-overlay-styles")) {
-      const style = document.createElement("style");
-      style.id = "debug-overlay-styles";
-      style.textContent = `
-            @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(-5px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-            #virtualgamepad-debug-overlay::-webkit-scrollbar {
-                width: 4px;
-            }
-            #virtualgamepad-debug-overlay::-webkit-scrollbar-track {
-                background: rgba(0, 20, 0, 0.3);
-            }
-            #virtualgamepad-debug-overlay::-webkit-scrollbar-thumb {
-                background: #00aa00;
-                border-radius: 2px;
-            }
-        `;
-      document.head.appendChild(style);
-    }
-  }
 
   function logButtonEvent(buttonId, action, keyMapping) {
     logDebug(`Button ${action.toUpperCase()}`, {
@@ -2099,6 +2086,7 @@
   function createTouchControls() {
     if (overlay) return;
 
+    //OVERLAY TO HOLD VIRTUAL TOUCH CONTROLS ON SCREEN
     overlay = document.createElement("div");
     overlay.style.cssText = `
             position: fixed;
@@ -2111,6 +2099,76 @@
             touch-action: none;
             -webkit-user-select: none;
             user-select: none;
+            background-color: green;
+        `;
+
+    // Create button cluster
+    const buttonCluster = createButtonCluster();
+    buttonCluster.style.cssText = `
+        position: absolute;
+        right: 30px;
+        top: 30px;
+        width: 200px;
+        height: 200px;
+        pointer-events: auto;
+    `;
+
+    // Create system buttons
+    const systemButtons = createSystemButtons();
+    systemButtons.style.cssText = `
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            pointer-events: auto;
+        `;
+
+    // Create D-pad
+    const dpad = createDpadTouch();
+    dpad.style.cssText = `
+          position: absolute;
+          left: 30px;
+          top: 30px;
+          width: 200px;
+          height: 200px;
+          pointer-events: auto;
+        `;
+
+    // ================ ADD SHOULDER BUTTONS HERE ================
+    // Create left shoulder buttons (L1/L2)
+    const leftShoulderButtons = createLeftShoulderButtons();
+    leftShoulderButtons.style.cssText = `
+          position: absolute;
+          left: 20px;
+          top: calc(50% - 60px);
+          width: 60px;
+          height: 120px;
+          pointer-events: auto;
+          z-index: ${config.zIndex - 1};
+          touch-action: none;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          align-items: center;
+        `;
+
+    // Create right shoulder buttons (R1/R2)
+    const rightShoulderButtons = createRightShoulderButtons();
+    rightShoulderButtons.style.cssText = `
+          position: absolute;
+          right: 20px;
+          top: calc(50% - 60px);
+          width: 60px;
+          height: 120px;
+          pointer-events: auto;
+          z-index: ${config.zIndex - 1};
+          touch-action: none;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          align-items: center;
         `;
 
     // Create left joystick area
@@ -2135,62 +2193,6 @@
             pointer-events: auto;
         `;
 
-    // Create button cluster
-    const buttonCluster = createButtonCluster();
-
-    // Position button cluster based on configuration
-    if (config.buttonClusterPosition === "top-right") {
-      buttonCluster.style.cssText = `
-                position: absolute;
-                right: 30px;
-                top: 30px;
-                width: 200px;
-                height: 200px;
-                pointer-events: auto;
-            `;
-    } else if (config.buttonClusterPosition === "center-right") {
-      buttonCluster.style.cssText = `
-                position: absolute;
-                right: 30px;
-                top: 50%;
-                transform: translateY(-50%);
-                width: 200px;
-                height: 200px;
-                pointer-events: auto;
-            `;
-    } else {
-      // bottom-right (default)
-      buttonCluster.style.cssText = `
-                position: absolute;
-                right: 30px;
-                bottom: calc(${config.joystickSize} + 60px);
-                width: 200px;
-                height: 200px;
-                pointer-events: auto;
-            `;
-    }
-
-    // Create system buttons
-    const systemButtons = createSystemButtons();
-    systemButtons.style.cssText = `
-            position: absolute;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 20px;
-            pointer-events: auto;
-        `;
-
-    // Create D-pad
-    const dpad = createDpadTouch();
-
-    // ================ ADD SHOULDER BUTTONS HERE ================
-    // Create left shoulder buttons (L1/L2)
-    const leftShoulderButtons = createLeftShoulderButtons();
-
-    // Create right shoulder buttons (R1/R2)
-    const rightShoulderButtons = createRightShoulderButtons();
     // ==========================================================
 
     // append on screen buttons
@@ -3936,18 +3938,22 @@
 
     trackpad.style.cssText = `
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+        top: 10%;
+        left: 10%;
+        width: 80%;
+        height: 80%;
         background: transparent;
         pointer-events: auto;
         touch-action: none;
-        z-index: ${config.zIndex - 2};
+        z-index: ${config.zIndex + 1};
         display: none;
         opacity: 1;
+        background-color: darkgray;
+        display: flex;
+        align-content: center;
+        text-align: center;
     `;
-
+    trackpad.textContent = "Touchpad";
     document.body.appendChild(trackpad);
 
     // Configuration for touch-to-mouse behavior
